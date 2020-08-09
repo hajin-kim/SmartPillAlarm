@@ -34,12 +34,12 @@ public class MainActivity extends AppCompatActivity {
 //            }
 //        });
 
-//        // DEVELOPMENT CODE
-//        SharedPreferences sharedPreferences = getSharedPreferences(AlarmDB.DB_NAME, MODE_PRIVATE);
-//        SharedPreferences.Editor editor = sharedPreferences.edit();
-//        editor.putInt(AlarmDB.NUM_OF_ALARM, 0);
-//        editor.apply();
-//        //
+        // DEVELOPMENT CODE
+        SharedPreferences sharedPreferences = getSharedPreferences(AlarmDB.DB_NAME, MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putInt(AlarmDB.NUM_OF_ALARM, 0);
+        editor.apply();
+        //
 
         final Button button_start = findViewById(R.id.button_start);
         button_start.setOnClickListener(new View.OnClickListener() {
