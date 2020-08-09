@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<resources>
+    <string name="title_app_name">SmartPillAlarm</string>
+
+    <string name="button_text_login">로그인</string>
+    <string name="button_text_start">시작하기</string>
+
+    <string name="button_text_alarm_generator">알람 생성</string>
+    <string name="warning_number_of_alarm_exceeds_limitation">지정된 알람이 너무 많습니다!</string>
+    <string name="message_alarm_generated">yyyy년 MM월 dd일 EE요일 a hh시 mm분에 알람이 설정되었습니다.</string>
+
+    <string name="channel_alarm_notification_name">복약 알림</string>
+    <string name="channel_alarm_notification_description">복약하셔야 할 약이 있는지 알려드려요!</string>
+    <string name="notification_auto_channel_content_title">복약 알림</string>
+    <string name="notification_auto_channel_content_text">복약하셔야 할 약이 있습니다.</string>
+
+    <string name="message_on_create_no_alarm">\'설정된 복약 알람이 없습니다.\'</string>
+    <string name="message_on_create_next_alarm">\'다음 복약 알람은 \'yyyy년 MM월 dd일 EE요일 a hh시 mm분\'입니다.\'</string>
+    <string name="message_after_boot_next_alarm">\'[SPA] 다음 복약 알람은 \'yyyy년 MM월 dd일 EE요일 a hh시 mm분\'입니다.\'</string>
+</resources>
