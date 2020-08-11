@@ -128,7 +128,6 @@ public class AlarmGeneratorActivity extends AppCompatActivity {
         int num_of_alarm = sharedPreferences.getInt(AlarmDB.NUM_OF_ALARM, 0);
         boolean dailyNotify; // 무조건 알람을 사용
         long millis;
-//        Calendar calendar = Calendar.getInstance();
 
         PackageManager pm = this.getPackageManager();
         ComponentName receiver = new ComponentName(this, DeviceBootReceiver.class);
@@ -142,7 +141,6 @@ public class AlarmGeneratorActivity extends AppCompatActivity {
             // jf user activated the alarm
             dailyNotify = sharedPreferences.getBoolean(AlarmDB.ALARM_ACTIVATED[i], false);
             millis = sharedPreferences.getLong(AlarmDB.ALARM_TIME[0], 0L);
-//            calendar.setTimeInMillis(millis);
 
             if (dailyNotify) {
 
