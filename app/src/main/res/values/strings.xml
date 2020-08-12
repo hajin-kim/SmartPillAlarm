@@ -16,5 +16,6 @@
 
     <string name="message_on_create_no_alarm">\'설정된 복약 알람이 없습니다.\'</string>
     <string name="message_on_create_next_alarm">\'다음 복약 알람은 \'yyyy년 MM월 dd일 EE요일 a hh시 mm분\'입니다.\'</string>
+    <string name="message_on_disable_the_alarm">yyyy년 MM월 dd일 EE요일 a hh시 mm분\'에 예약된 알람이 취소되었습니다.\'</string>
     <string name="message_after_boot_next_alarm">\'[SPA] 다음 복약 알람은 \'yyyy년 MM월 dd일 EE요일 a hh시 mm분\'입니다.\'</string>
 </resources>

@@ -136,17 +136,17 @@ public class AlarmGeneratorActivity extends AppCompatActivity {
         PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, alarmIntent, 0);
         AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
 
+        boolean disable_boot_receiver = true;
 
         for (int i = 0; i < num_of_alarm; ++i) {
-            // jf user activated the alarm
             dailyNotify = sharedPreferences.getBoolean(AlarmDB.ALARM_ACTIVATED[i], false);
             millis = sharedPreferences.getLong(AlarmDB.ALARM_TIME[0], 0L);
 
+            // jf user activated the alarm
             if (dailyNotify) {
 
                 if (alarmManager != null) {
-
-                    alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, millis,
+                    alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, millis,
                             AlarmManager.INTERVAL_DAY, pendingIntent);
 
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -159,17 +159,23 @@ public class AlarmGeneratorActivity extends AppCompatActivity {
                         PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
                         PackageManager.DONT_KILL_APP);
 
+                disable_boot_receiver = false;
             }
 
-//        else { //Disable Daily Notifications
-//            if (PendingIntent.getBroadcast(this, 0, alarmIntent, 0) != null && alarmManager != null) {
-//                alarmManager.cancel(pendingIntent);
-//                //Toast.makeText(this,"Notifications were disabled",Toast.LENGTH_SHORT).show();
-//            }
-//            pm.setComponentEnabledSetting(receiver,
-//                    PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
-//                    PackageManager.DONT_KILL_APP);
-//        }
+            // else disable daily notification
+            else {
+                if (PendingIntent.getBroadcast(this, 0, alarmIntent, 0) != null && alarmManager != null) {
+                    alarmManager.cancel(pendingIntent);
+                    Methods.generateDateToast(this, R.string.message_on_disable_the_alarm, new Date(millis));
+                }
+            }
+        }
+
+        if (disable_boot_receiver) {
+            // turn off DeviceBootReceiver
+            pm.setComponentEnabledSetting(receiver,
+                    PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
+                    PackageManager.DONT_KILL_APP);
         }
     }
 }
