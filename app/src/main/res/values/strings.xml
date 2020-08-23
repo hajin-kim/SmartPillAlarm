@@ -17,4 +17,13 @@
     <string name="message_on_create_no_alarm">\'설정된 복약 알람이 없습니다.\'</string>
     <string name="message_on_create_next_alarm">\'다음 복약 알람은 \'yyyy년 MM월 dd일 EE요일 a hh시 mm분\'입니다.\'</string>
     <string name="message_after_boot_next_alarm">\'[SPA] 다음 복약 알람은 \'yyyy년 MM월 dd일 EE요일 a hh시 mm분\'입니다.\'</string>
+
+    // Login Activity 호진
+    <string name="btn_login_login">로그인</string>
+    <string name="tv_login_countdown">남은 로그인 횟수: </string>
+    <string name="tv_login_register">회원가입</string>
+    <string name="btn_register_register">회원가입</string>
+    <string name="tv_register_already_registered">이미 계정이 있습니다</string>
+    <string name="btn_main_logout">로그아웃</string>
+
 </resources>
