@@ -5,17 +5,25 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 //import androidx.appcompat.widget.Toolbar;
 
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
+import com.google.firebase.auth.FirebaseAuth;
+
 public class MainActivity extends AppCompatActivity {
+
+    private Button logout_button;
+    private FirebaseAuth firebaseAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        setTheme(R.style.AppTheme_NoActionBar);
+        //setTheme(R.style.AppTheme_NoActionBar);
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
@@ -24,6 +32,16 @@ public class MainActivity extends AppCompatActivity {
 //        setSupportActionBar(toolbar);
 
         final Context context = this;
+
+        firebaseAuth = FirebaseAuth.getInstance();    // for login-logout via Firebase
+
+        logout_button = (Button)findViewById(R.id.btn_main_logout);
+        logout_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                logout();
+            }
+        });
 
 //        FloatingActionButton fab = findViewById(R.id.fab);
 //        fab.setOnClickListener(new View.OnClickListener() {
@@ -69,5 +87,27 @@ public class MainActivity extends AppCompatActivity {
 //                finish();
             }
         });
+    }
+
+    private void logout(){
+        firebaseAuth.signOut();
+        finish();
+        startActivity(new Intent(MainActivity.this, Login.class));
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch(item.getItemId()){
+            case R.id.menu_main_logout:{
+                logout();
+            }
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

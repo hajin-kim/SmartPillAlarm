@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "1027409390614",
+    "firebase_url": "https://smart-pill-alarm.firebaseio.com",
+    "project_id": "smart-pill-alarm",
+    "storage_bucket": "smart-pill-alarm.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1027409390614:android:84dcd94b78c21de1575937",
+        "android_client_info": {
+          "package_name": "com.example.smartpillalarm"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1027409390614-fgp332jnem25vaul4dhnn82k0nmqvebf.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDJgrRY1NU3tBRITyWOXoq5EsVDn6KLOYo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1027409390614-fgp332jnem25vaul4dhnn82k0nmqvebf.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
