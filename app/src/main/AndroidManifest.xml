@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.smartpillalarm">
 
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -22,7 +24,10 @@
             android:theme="@style/SplashTheme" />
         <activity android:name=".AlarmGeneratorActivity" />
 
-        <receiver android:name=".AlarmReceiver" />
+        <receiver
+            android:name=".AlarmReceiver">
+        </receiver>
+
         <receiver
             android:name=".DeviceBootReceiver"
             android:enabled="false">
@@ -31,5 +36,4 @@
             </intent-filter>
         </receiver>
     </application>
-
 </manifest>
