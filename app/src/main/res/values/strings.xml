@@ -5,6 +5,8 @@
     <string name="button_text_login">로그인</string>
     <string name="button_text_start">시작하기</string>
 
+    <string name="simple_date_format">yyyy년 MM월 dd일 EE요일 a hh시 mm분</string>
+
     <string name="button_text_alarm_generator">알람 생성</string>
     <string name="warning_number_of_alarm_exceeds_limitation">지정된 알람이 너무 많습니다!</string>
     <string name="message_alarm_generated">yyyy년 MM월 dd일 EE요일 a hh시 mm분에 알람이 설정되었습니다.</string>
@@ -14,8 +16,10 @@
     <string name="notification_auto_channel_content_title">복약 알림</string>
     <string name="notification_auto_channel_content_text">복약하셔야 할 약이 있습니다.</string>
 
-    <string name="message_on_create_no_alarm">\'설정된 복약 알람이 없습니다.\'</string>
-    <string name="message_on_create_next_alarm">\'다음 복약 알람은 \'yyyy년 MM월 dd일 EE요일 a hh시 mm분\'입니다.\'</string>
-    <string name="message_on_disable_the_alarm">yyyy년 MM월 dd일 EE요일 a hh시 mm분\'에 예약된 알람이 취소되었습니다.\'</string>
+    <string name="message_on_throw_database_fault">알람 데이터베이스 로드 실패! [code: THROW_DATABASE_FAULT]</string>
+    <string name="message_on_create_where_no_alarm">설정된 복약 알람이 없습니다.</string>
+    <string name="message_on_create_where_with_next_alarm">\'다음 복약 알람은 \'yyyy년 MM월 dd일 EE요일 a hh시 mm분\'입니다.\'</string>
+    <string name="message_on_disable_all_alarms">알람이 모두 취소되었습니다.</string>
+    <string name="message_on_exception_null_alarm_manager">시스템에 알람을 설정할 수 없습니다! [code: NULL_ALARM_MANAGER]</string>
     <string name="message_after_boot_next_alarm">\'[SPA] 다음 복약 알람은 \'yyyy년 MM월 dd일 EE요일 a hh시 mm분\'입니다.\'</string>
 </resources>

@@ -18,7 +18,6 @@ import android.widget.TimePicker;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.Locale;
 
 
@@ -33,22 +32,41 @@ public class AlarmGeneratorActivity extends AppCompatActivity {
         final TimePicker picker = findViewById(R.id.time_picker);
         picker.setIs24HourView(true);
 
-        final SharedPreferences sharedPreferences = getSharedPreferences(AlarmDB.DB_NAME, MODE_PRIVATE);
+        AlarmDB alarmDB = null;
+
+        try {
+            alarmDB = AlarmDB.getInstance(getSharedPreferences(AlarmDB.DB_NAME, MODE_PRIVATE));
+        } catch (Exception e) {
+            Methods.generateDateToast(getApplicationContext(),
+                    R.string.message_on_throw_database_fault);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                deleteSharedPreferences(AlarmDB.DB_NAME);
+            }
+            return;
+        }
+
+
+        // load the time onto the nextNotifyTime
+        Calendar nextNotifyTime = Calendar.getInstance();
+
+        // show a message for the next alarm
+        int num_of_alarm = alarmDB.num_of_alarm;
 
         // get the time of the alarm if exist
         // get the current local time if not
-        long millis = sharedPreferences.getLong(AlarmDB.ALARM_TIME[0], Calendar.getInstance().getTimeInMillis());
-
-        // load the time onto the nextNotifyTime
-        Calendar nextNotifyTime = new GregorianCalendar();
-        nextNotifyTime.setTimeInMillis(millis);
-
-        // show a message for the next alarm
-        int num_of_alarm = sharedPreferences.getInt(AlarmDB.NUM_OF_ALARM, 0);
-        if (num_of_alarm == 0)
-            Methods.generateDateToast(getApplicationContext(), R.string.message_on_create_no_alarm, nextNotifyTime.getTime());
-        else
-            Methods.generateDateToast(getApplicationContext(), R.string.message_on_create_next_alarm, nextNotifyTime.getTime());
+        long millis;
+        if (num_of_alarm == 0) {
+            Methods.generateDateToast(getApplicationContext(),
+                    R.string.message_on_create_where_no_alarm);
+            millis = nextNotifyTime.getTimeInMillis();
+        }
+        else {
+            millis = alarmDB.array_alarm[0].time;
+            nextNotifyTime.setTimeInMillis(millis);
+            Methods.generateDateToast(getApplicationContext(),
+                    R.string.message_on_create_where_with_next_alarm,
+                    nextNotifyTime.getTime());
+        }
 
         // set the time of the timePicker for the default(current)
         Date currentTime = nextNotifyTime.getTime();
@@ -73,10 +91,26 @@ public class AlarmGeneratorActivity extends AppCompatActivity {
         button_alarm_generator.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View arg0) {
+                final SharedPreferences sharedPreferences = getSharedPreferences(AlarmDB.DB_NAME, MODE_PRIVATE);
+
+                AlarmDB alarmDB = null;
+
+                try {
+                    alarmDB = AlarmDB.getInstance(sharedPreferences);
+                } catch (Exception e) {
+                    Methods.generateDateToast(getApplicationContext(),
+                            R.string.message_on_throw_database_fault);
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                        deleteSharedPreferences(AlarmDB.DB_NAME);
+                    }
+                    return;
+                }
+
                 // when this button is clicked
-                int num_of_alarm = sharedPreferences.getInt(AlarmDB.NUM_OF_ALARM, 0);
-                if (num_of_alarm >= 20) {
-                    Methods.generateDateToast(getApplicationContext(), R.string.warning_number_of_alarm_exceeds_limitation, null);
+                int num_of_alarm = alarmDB.num_of_alarm;
+                if (num_of_alarm >= AlarmDB.MAX_ALARM) {
+                    Methods.generateDateToast(getApplicationContext(),
+                            R.string.warning_number_of_alarm_exceeds_limitation);
                     return;
                 }
 
@@ -102,80 +136,104 @@ public class AlarmGeneratorActivity extends AppCompatActivity {
                     calendar.add(Calendar.DATE, 1);
                 }
 
+                // insert
                 // show a toast message for that the alarm is generated
-                Methods.generateDateToast(getApplicationContext(), R.string.message_alarm_generated, calendar.getTime());
-
-                // save the alarm to the preference
-                SharedPreferences.Editor editor = sharedPreferences.edit();
-                editor.putLong(AlarmDB.ALARM_TIME[num_of_alarm], calendar.getTimeInMillis());
-                editor.putBoolean(AlarmDB.ALARM_ACTIVATED[num_of_alarm], true);
-                editor.putString(AlarmDB.ALARM_CONTENTS[num_of_alarm], "alarm " + num_of_alarm);
-                editor.putInt(AlarmDB.NUM_OF_ALARM, ++num_of_alarm);
-                editor.apply();
+                if (alarmDB.insertAlarm(calendar, "alarm", true, sharedPreferences)) {
+                    Methods.generateDateToast(getApplicationContext(),
+                            R.string.message_alarm_generated,
+                            calendar.getTime());
+                } else {
+                    /*
+                    should be implemented
+                    H.K.
+                     */
+                    // DEV CODE
+                    System.out.println("!!! 알람 생성 실패 !!!");
+                    return;
+                }
 
                 diaryNotification();
+//                diaryNotification(calendar.getTimeInMillis());
             }
         });
     }
 
 
-    void diaryNotification()
+//   public void diaryNotification(long time)
+    public void diaryNotification()
     {
-//        PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
         final SharedPreferences sharedPreferences = getSharedPreferences(AlarmDB.DB_NAME, MODE_PRIVATE);
 
-//        Boolean dailyNotify = sharedPref.getBoolean(SettingsActivity.KEY_PREF_DAILY_NOTIFICATION, true);
-        int num_of_alarm = sharedPreferences.getInt(AlarmDB.NUM_OF_ALARM, 0);
-        boolean dailyNotify; // 무조건 알람을 사용
-        long millis;
+        AlarmDB alarmDB = null;
 
-        PackageManager pm = this.getPackageManager();
+        try {
+            alarmDB = AlarmDB.getInstance(sharedPreferences);
+        } catch (Exception e) {
+            Methods.generateDateToast(getApplicationContext(),
+                    R.string.message_on_throw_database_fault);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                deleteSharedPreferences(AlarmDB.DB_NAME);
+            }
+            return;
+        }
+
+        PackageManager packageManager = this.getPackageManager();
         ComponentName receiver = new ComponentName(this, DeviceBootReceiver.class);
         Intent alarmIntent = new Intent(this, AlarmReceiver.class);
 
         PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, alarmIntent, 0);
         AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
 
-        boolean disable_boot_receiver = true;
-
-        for (int i = 0; i < num_of_alarm; ++i) {
-            dailyNotify = sharedPreferences.getBoolean(AlarmDB.ALARM_ACTIVATED[i], false);
-            millis = sharedPreferences.getLong(AlarmDB.ALARM_TIME[0], 0L);
-
-            // jf user activated the alarm
-            if (dailyNotify) {
-
-                if (alarmManager != null) {
-                    alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, millis,
-                            AlarmManager.INTERVAL_DAY, pendingIntent);
-
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                        alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, millis, pendingIntent);
-                    }
-                }
-
-                // turn on DeviceBootReceiver
-                pm.setComponentEnabledSetting(receiver,
-                        PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
-                        PackageManager.DONT_KILL_APP);
-
-                disable_boot_receiver = false;
-            }
-
-            // else disable daily notification
-            else {
-                if (PendingIntent.getBroadcast(this, 0, alarmIntent, 0) != null && alarmManager != null) {
-                    alarmManager.cancel(pendingIntent);
-                    Methods.generateDateToast(this, R.string.message_on_disable_the_alarm, new Date(millis));
-                }
-            }
+        if (alarmManager == null) {
+            Methods.generateDateToast(this,
+                    R.string.message_on_exception_null_alarm_manager);
+            return;
         }
 
-        if (disable_boot_receiver) {
+
+        // get earliest alarm
+        Alarm alarm = alarmDB.getEarliestAlarm();
+
+        // jf user activated the alarm
+        if (alarm != null) {
+            long millis = alarm.time;
+            // DEV CODE
+//            long millis = time;
+            //
+
+            alarmManager.setRepeating(AlarmManager.RTC_WAKEUP,
+                    millis,
+                    AlarmManager.INTERVAL_DAY,
+                    pendingIntent);
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP,
+                        millis,
+                        pendingIntent);
+            }
+
+            // turn on DeviceBootReceiver
+            packageManager.setComponentEnabledSetting(receiver,
+                    PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
+                    PackageManager.DONT_KILL_APP);
+        }
+
+        else {
+            // disable daily notification
+            if (PendingIntent.getBroadcast(this, 0, alarmIntent, 0) != null) {
+                alarmManager.cancel(pendingIntent);
+                Methods.generateDateToast(this,
+                        R.string.message_on_disable_all_alarms);
+            }
+
             // turn off DeviceBootReceiver
-            pm.setComponentEnabledSetting(receiver,
+            packageManager.setComponentEnabledSetting(receiver,
                     PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
                     PackageManager.DONT_KILL_APP);
         }
+
+        // DEV CODE
+        AlarmDB.printAlarmDB(this);
+        Methods.printNextAlarm(this);
     }
 }

@@ -2,7 +2,7 @@ package com.example.smartpillalarm;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -34,12 +34,32 @@ public class MainActivity extends AppCompatActivity {
 //            }
 //        });
 
-        // DEVELOPMENT CODE
-        SharedPreferences sharedPreferences = getSharedPreferences(AlarmDB.DB_NAME, MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putInt(AlarmDB.NUM_OF_ALARM, 0);
-        editor.apply();
+        // DEV CODE
+//        SharedPreferences sharedPreferences = getSharedPreferences(AlarmDB.DB_NAME, MODE_PRIVATE);
+//        SharedPreferences.Editor editor = sharedPreferences.edit();
+//        editor.putInt(AlarmDB.NUM_OF_ALARM, 0);
+//        editor.apply();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            deleteSharedPreferences(AlarmDB.DB_NAME);
+        }
         //
+
+        // DEV CODE
+        AlarmDB.printAlarmDB(this);
+        Methods.printNextAlarm(this);
+
+        AlarmDB alarmDB = null;
+
+        try {
+            alarmDB = AlarmDB.getInstance(getSharedPreferences(AlarmDB.DB_NAME, MODE_PRIVATE));
+        } catch (Exception e) {
+            Methods.generateDateToast(getApplicationContext(),
+                    R.string.message_on_throw_database_fault);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                deleteSharedPreferences(AlarmDB.DB_NAME);
+            }
+            return;
+        }
 
         final Button button_start = findViewById(R.id.button_start);
         button_start.setOnClickListener(new View.OnClickListener() {
