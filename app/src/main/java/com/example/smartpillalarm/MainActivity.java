@@ -20,10 +20,12 @@ public class MainActivity extends AppCompatActivity {
 
     private Button logout_button;
     private FirebaseAuth firebaseAuth;
+    private Context appContext;
+    private Context thisContext;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        //setTheme(R.style.AppTheme_NoActionBar);
+//        setTheme(R.style.AppTheme_NoActionBar);
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
@@ -31,7 +33,8 @@ public class MainActivity extends AppCompatActivity {
 //        Toolbar toolbar = findViewById(R.id.toolbar);
 //        setSupportActionBar(toolbar);
 
-        final Context context = this;
+        appContext = getApplicationContext();
+        thisContext = MainActivity.this;
 
         firebaseAuth = FirebaseAuth.getInstance();    // for login-logout via Firebase
 
@@ -53,37 +56,22 @@ public class MainActivity extends AppCompatActivity {
 //        });
 
         // DEV CODE
-//        SharedPreferences sharedPreferences = getSharedPreferences(AlarmDB.DB_NAME, MODE_PRIVATE);
-//        SharedPreferences.Editor editor = sharedPreferences.edit();
-//        editor.putInt(AlarmDB.NUM_OF_ALARM, 0);
-//        editor.apply();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             deleteSharedPreferences(AlarmDB.DB_NAME);
         }
-        //
 
         // DEV CODE
-        AlarmDB.printAlarmDB(this);
-        Methods.printNextAlarm(this);
+        AlarmDB.printAlarmDB(appContext);
+        Methods.printNextAlarm(appContext);
 
-        AlarmDB alarmDB = null;
-
-        try {
-            alarmDB = AlarmDB.getInstance(getSharedPreferences(AlarmDB.DB_NAME, MODE_PRIVATE));
-        } catch (Exception e) {
-            Methods.generateDateToast(getApplicationContext(),
-                    R.string.message_on_throw_database_fault);
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                deleteSharedPreferences(AlarmDB.DB_NAME);
-            }
-            return;
-        }
+        // renew
+        AlarmDB.getInstance(appContext);
 
         final Button button_start = findViewById(R.id.button_start);
         button_start.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(context, AlarmGeneratorActivity.class));
+                startActivity(new Intent(thisContext, AlarmGeneratorActivity.class));
 //                finish();
             }
         });
@@ -92,7 +80,7 @@ public class MainActivity extends AppCompatActivity {
     private void logout(){
         firebaseAuth.signOut();
         finish();
-        startActivity(new Intent(MainActivity.this, Login.class));
+        startActivity(new Intent(thisContext, Login.class));
     }
 
     @Override

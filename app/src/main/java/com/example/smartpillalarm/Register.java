@@ -3,6 +3,7 @@ package com.example.smartpillalarm;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -23,12 +24,15 @@ public class Register extends AppCompatActivity {
     private Button register_button;
     private TextView register_already_registered;
     private FirebaseAuth firebaseAuth;
+    private Context appContext;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
         setup_UI_Views();    // UI View 설정
+
+        appContext = getApplicationContext();
 
         firebaseAuth = FirebaseAuth.getInstance();
 
@@ -47,7 +51,7 @@ public class Register extends AppCompatActivity {
                                 send_email_verification();
                             }
                             else{
-                                Toast.makeText(Register.this, "회원가입에 실패했습니다", Toast.LENGTH_SHORT).show();
+                                Methods.generateToast(appContext, R.string.tv_register_register_failed);
                             }
                         }
                     });
@@ -74,17 +78,25 @@ public class Register extends AppCompatActivity {
 
     private Boolean all_values_filled(){
         Boolean result = false;
-        String ID = register_ID.getText().toString();
-        String PW = register_PW.getText().toString();
-        String Email = register_Email.getText().toString();
+        String id = register_ID.getText().toString();
+        String pw = register_PW.getText().toString();
+        String email = register_Email.getText().toString();
 
-        if(ID.isEmpty() || PW.isEmpty() || Email.isEmpty()){
-            Toast.makeText(this, "모든 항목을 채워주세요", Toast.LENGTH_SHORT).show();
+        // check if user filled id, pw and email
+        if (id.isEmpty()) {
+            Methods.generateToast(appContext, R.string.tv_common_id_is_empty);
+            return false;
         }
-        else{
-            result = true;
+        if (pw.isEmpty()) {
+            Methods.generateToast(appContext, R.string.tv_common_pw_is_empty);
+            return false;
         }
-        return result;
+        if (email.isEmpty()){
+            Methods.generateToast(appContext, R.string.tv_common_email_is_empty);
+            return false;
+        }
+
+        return true;
     }
 
     private void send_email_verification(){
@@ -94,13 +106,13 @@ public class Register extends AppCompatActivity {
                 @Override
                 public void onComplete(@NonNull Task<Void> task) {
                     if(task.isSuccessful()){
-                        Toast.makeText(Register.this, "인증 메일이 전송되었습니다", Toast.LENGTH_SHORT).show();
+                        Methods.generateToast(appContext, R.string.tv_register_verify_email_sent);
                         firebaseAuth.signOut();
                         finish();
                         startActivity(new Intent(Register.this, Login.class));
                     }
                     else{
-                        Toast.makeText(Register.this, "인증 메일 전송이 실패했습니다", Toast.LENGTH_SHORT).show();
+                        Methods.generateToast(appContext, R.string.tv_register_verify_email_sending_failed);
                     }
                 }
             });
