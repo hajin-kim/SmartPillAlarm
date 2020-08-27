@@ -27,8 +27,20 @@
     <string name="btn_login_login">로그인</string>
     <string name="tv_login_countdown">남은 로그인 횟수: </string>
     <string name="tv_login_register">회원가입</string>
-    <string name="btn_register_register">회원가입</string>
+    <string name="btn_register_next">다음</string>
     <string name="tv_register_already_registered">이미 계정이 있습니다</string>
     <string name="btn_main_logout">로그아웃</string>
+    <string name="tv_login_forgot_PW">비밀번호 찾기</string>
+    <string name="btn_findpw_reset_pw">비밀번호 재설정</string>
+    <string name="tv_userdetails_details">세부정보를 입력해주세요</string>
+    <string name="tv_userdetails_sex">성별</string>
+    <string name="checkbox_userdetails_male">남성</string>
+    <string name="checkbox_userdetails_female">여성</string>
+    <string name="tv_userdetails_blood_pressure">고혈압</string>
+    <string name="tv_userdetails_pregnancy">임신 여부</string>
+    <string name="tv_userdetails_diabetes">당뇨</string>
+    <string name="checkbox_userdetails_positive">있음</string>
+    <string name="checkbox_userdetails_negative">없음</string>
+    <string name="btn_userdetails_register">회원가입</string>
 
 </resources>

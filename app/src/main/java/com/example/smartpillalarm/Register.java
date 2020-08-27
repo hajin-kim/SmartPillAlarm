@@ -97,7 +97,7 @@ public class Register extends AppCompatActivity {
                         Toast.makeText(Register.this, "인증 메일이 전송되었습니다", Toast.LENGTH_SHORT).show();
                         firebaseAuth.signOut();
                         finish();
-                        startActivity(new Intent(Register.this, Login.class));
+                        startActivity(new Intent(Register.this, RegisterUserDetails.class));
                     }
                     else{
                         Toast.makeText(Register.this, "인증 메일 전송이 실패했습니다", Toast.LENGTH_SHORT).show();

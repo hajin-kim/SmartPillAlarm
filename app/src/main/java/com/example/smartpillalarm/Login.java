@@ -28,6 +28,7 @@ public class Login extends AppCompatActivity {
     private TextView login_register;
     private FirebaseAuth firebaseAuth;
     private ProgressDialog progressDialog;
+    private TextView forgotPW;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +40,7 @@ public class Login extends AppCompatActivity {
         login_countdown = (TextView)findViewById(R.id.tv_login_countdown);
         login_button = (Button)findViewById(R.id.btn_login_login);
         login_register = (TextView)findViewById(R.id.tv_login_register);
+        forgotPW = (TextView)findViewById(R.id.tv_forgot_PW);
 
         login_countdown.setText("남은 로그인 횟수: 5");
 
@@ -63,6 +65,13 @@ public class Login extends AppCompatActivity {
             @Override
             public void onClick(View view){
                 startActivity(new Intent(Login.this, Register.class));
+            }
+        });
+
+        forgotPW.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view){
+                startActivity(new Intent(Login.this, FindPW.class));
             }
         });
     }
