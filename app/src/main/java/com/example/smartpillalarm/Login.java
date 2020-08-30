@@ -76,7 +76,7 @@ public class Login extends AppCompatActivity {
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if(task.isSuccessful()){
                     progressDialog.dismiss();
-                    //Toast.makeText(Login.this,"로그인 성공",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(Login.this,"로그인 성공",Toast.LENGTH_SHORT).show();
                     check_email_verification();
                 }
                 else{

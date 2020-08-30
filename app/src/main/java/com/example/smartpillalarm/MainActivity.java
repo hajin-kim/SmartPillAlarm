@@ -19,14 +19,18 @@ import com.google.firebase.auth.FirebaseAuth;
 public class MainActivity extends AppCompatActivity {
 
     private Button logout_button;
+    private Button profile_button;
     private FirebaseAuth firebaseAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        //setTheme(R.style.AppTheme_NoActionBar);
+        setTheme(R.style.AppTheme_NoActionBar);
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        logout_button = (Button)findViewById(R.id.btn_main_logout);
+        profile_button = findViewById(R.id.btn_main_profile);
 
 //        Toolbar toolbar = findViewById(R.id.toolbar);
 //        setSupportActionBar(toolbar);
@@ -35,11 +39,18 @@ public class MainActivity extends AppCompatActivity {
 
         firebaseAuth = FirebaseAuth.getInstance();    // for login-logout via Firebase
 
-        logout_button = (Button)findViewById(R.id.btn_main_logout);
         logout_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 logout();
+            }
+        });
+
+        profile_button.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view){
+                finish();
+                startActivity(new Intent(MainActivity.this, Profile.class));
             }
         });
 
