@@ -32,12 +32,13 @@ public class Login extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        appContext = getApplicationContext();
 
         setTheme(R.style.AppTheme_NoActionBar);
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        appContext = getApplicationContext();
 
         login_ID = (EditText)findViewById(R.id.et_login_ID);
         login_PW = (EditText)findViewById(R.id.et_login_PW);
