@@ -95,7 +95,7 @@ public class Login extends AppCompatActivity {
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if(task.isSuccessful()){
                     progressDialog.dismiss();
-                    check_email_verification();
+                    checkEmailVerification();
                 }
                 else{
                     progressDialog.dismiss();
@@ -110,9 +110,10 @@ public class Login extends AppCompatActivity {
         });
     }
 
-    private void check_email_verification(){
-        FirebaseUser firebaseUser = firebaseAuth.getInstance().getCurrentUser();
-        Boolean email_verified = firebaseUser.isEmailVerified();
+    private void checkEmailVerification(){
+        FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        assert firebaseUser != null;
+        boolean email_verified = firebaseUser.isEmailVerified();
         if(email_verified){
             finish();
             Methods.generateToast(appContext, R.string.tv_login_success);
