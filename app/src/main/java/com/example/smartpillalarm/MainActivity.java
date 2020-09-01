@@ -14,6 +14,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
+import com.example.smartpillalarm.codescanner.QRScannerActivity;
 import com.google.firebase.auth.FirebaseAuth;
 
 public class MainActivity extends AppCompatActivity {
@@ -72,6 +73,15 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(thisContext, AlarmGeneratorActivity.class));
+//                finish();
+            }
+        });
+
+        final Button button_start_pill_add = findViewById(R.id.button_start_pill_add);
+        button_start_pill_add.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(thisContext, QRScannerActivity.class));
 //                finish();
             }
         });

@@ -3,7 +3,8 @@
     <string name="title_app_name">SmartPillAlarm</string>
 
     <string name="button_text_login">로그인</string>
-    <string name="button_text_start">시작하기</string>
+    <string name="button_text_start">알람</string>
+    <string name="button_text_start_pill_add">약 검색/등록</string>
 
     <string name="simple_date_format">yyyy년 MM월 dd일 EE요일 a hh시 mm분</string>
 

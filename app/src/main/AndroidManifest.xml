@@ -11,7 +11,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar">
+
         <activity android:name=".Register"></activity>
+
         <activity
             android:name=".Login"
             android:theme="@style/SplashTheme">
@@ -21,11 +23,21 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity
             android:name=".MainActivity"
             android:theme="@style/SplashTheme" />
 
         <activity android:name=".AlarmGeneratorActivity" />
+
+        <activity
+            android:name=".codescanner.QRScannerActivity"
+            android:stateNotNeeded="true"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="stateAlwaysHidden"
+            />
+
+<!--        android:screenOrientation="fullSensor"-->
 
         <receiver
             android:name=".AlarmReceiver">

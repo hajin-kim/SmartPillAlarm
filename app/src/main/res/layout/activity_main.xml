@@ -8,15 +8,27 @@
     tools:context=".MainActivity">
 
     <Button
+        android:id="@+id/button_start_pill_add"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="48dp"
+        android:text="@string/button_text_start_pill_add"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/button_start"
+        app:layout_constraintVertical_bias="0" />
+
+    <Button
         android:id="@+id/button_start"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="17dp"
+        android:layout_marginTop="48dp"
         android:text="@string/button_text_start"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btn_main_logout"
+        app:layout_constraintTop_toTopOf="@+id/btn_main_logout"
         app:layout_constraintVertical_bias="0.0" />
 
     <Button
@@ -26,7 +38,6 @@
         android:layout_marginTop="472dp"
         android:text="@string/btn_main_logout"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
