@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.smartpillalarm">
+    <uses-permission android:name="android.permission.CAMERA"/>
+    <uses-feature android:name="android.hardware.camera"/>
+    <uses-feature android:name="android.hardware.camera.autofocus"/>
 
     <application
         android:allowBackup="true"
@@ -23,6 +26,11 @@
             android:name=".MainActivity"
             android:theme="@style/SplashTheme" />
         <activity android:name=".AlarmGeneratorActivity" />
+        <activity android:name=".CaptureAct"
+            android:screenOrientation="fullSensor"
+            android:stateNotNeeded="true"
+            android:windowSoftInputMode="stateAlwaysHidden">
+        </activity>
 
         <receiver android:name=".AlarmReceiver" />
         <receiver

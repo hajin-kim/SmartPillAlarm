@@ -1,11 +1,13 @@
 package com.example.smartpillalarm;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 //import androidx.appcompat.widget.Toolbar;
 
@@ -13,13 +15,17 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.zxing.integration.android.IntentIntegrator;
+import com.google.zxing.integration.android.IntentResult;
 
 public class MainActivity extends AppCompatActivity {
 
     private Button logout_button;
     private Button profile_button;
+    private Button scan_button;
     private FirebaseAuth firebaseAuth;
 
     @Override
@@ -29,11 +35,9 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        logout_button = (Button)findViewById(R.id.btn_main_logout);
+        logout_button = findViewById(R.id.btn_main_logout);
         profile_button = findViewById(R.id.btn_main_profile);
-
-//        Toolbar toolbar = findViewById(R.id.toolbar);
-//        setSupportActionBar(toolbar);
+        scan_button = findViewById(R.id.btn_main_scan);
 
         final Context context = this;
 
@@ -54,20 +58,13 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-//        FloatingActionButton fab = findViewById(R.id.fab);
-//        fab.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-//                        .setAction("Action", null).show();
-//            }
-//        });
+        scan_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                scanCode();
+            }
+        });
 
-        // DEV CODE
-//        SharedPreferences sharedPreferences = getSharedPreferences(AlarmDB.DB_NAME, MODE_PRIVATE);
-//        SharedPreferences.Editor editor = sharedPreferences.edit();
-//        editor.putInt(AlarmDB.NUM_OF_ALARM, 0);
-//        editor.apply();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             deleteSharedPreferences(AlarmDB.DB_NAME);
         }
@@ -75,7 +72,7 @@ public class MainActivity extends AppCompatActivity {
 
         // DEV CODE
         AlarmDB.printAlarmDB(this);
-        Methods.printNextAlarm(this);
+        //Methods.printNextAlarm(getApplicationContext());
 
         AlarmDB alarmDB = null;
 
@@ -120,5 +117,45 @@ public class MainActivity extends AppCompatActivity {
             }
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void scanCode(){
+        IntentIntegrator intentIntegrator = new IntentIntegrator(this);
+        intentIntegrator.setCaptureActivity(CaptureAct.class);
+        intentIntegrator.setOrientationLocked(false);
+        intentIntegrator.setDesiredBarcodeFormats(IntentIntegrator.ALL_CODE_TYPES);
+        intentIntegrator.setPrompt("코드 스캔");
+        intentIntegrator.initiateScan();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data){
+        IntentResult result = IntentIntegrator.parseActivityResult(requestCode,resultCode,data);
+        if(result != null){
+            if(result.getContents() != null){
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                builder.setMessage(result.getContents());
+                builder.setTitle("스캔 결과");
+                builder.setPositiveButton("재시도", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        scanCode();
+                    }
+                }).setNegativeButton("완료", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        //finish();
+                    }
+                });
+                AlertDialog dialog = builder.create();
+                dialog.show();
+            }
+            else{
+                Toast.makeText(this, "결과 없음", Toast.LENGTH_SHORT).show();
+            }
+        }
+        else{
+            super.onActivityResult(requestCode,resultCode,data);
+        }
     }
 }

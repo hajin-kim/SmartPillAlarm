@@ -234,6 +234,6 @@ public class AlarmGeneratorActivity extends AppCompatActivity {
 
         // DEV CODE
         AlarmDB.printAlarmDB(this);
-        Methods.printNextAlarm(this);
+        //Methods.printNextAlarm(this);
     }
 }

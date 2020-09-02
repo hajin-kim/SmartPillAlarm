@@ -77,7 +77,9 @@ public class Login extends AppCompatActivity {
                 if(task.isSuccessful()){
                     progressDialog.dismiss();
                     Toast.makeText(Login.this,"로그인 성공",Toast.LENGTH_SHORT).show();
-                    check_email_verification();
+                    //check_email_verification();
+                    // email verification 일단 비활성화함
+                    startActivity(new Intent(Login.this, MainActivity.class));
                 }
                 else{
                     progressDialog.dismiss();
