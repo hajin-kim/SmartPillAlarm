@@ -3,6 +3,7 @@ package com.example.smartpillalarm;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -33,8 +34,10 @@ public class Register extends AppCompatActivity {
     private CheckBox checkbox_pregnancy;
     private CheckBox checkbox_diabetes;
     private CheckBox checkbox_blood_pressure;
-    String ID, PW, Email, age;
-    Boolean gender = true, pregnancy = false, blood_pressure = false, diabetes = false;
+    private Context appContext;
+
+    String id, pw, email, age;
+    boolean gender = true, pregnancy = false, blood_pressure = false, diabetes = false;
 
     private void setup_UI_Views(){
         register_ID = (EditText)findViewById(R.id.et_register_ID);
@@ -117,7 +120,7 @@ public class Register extends AppCompatActivity {
                                 startActivity(new Intent(Register.this, Login.class));
                             }
                             else{
-                                Toast.makeText(Register.this, "회원가입에 실패했습니다", Toast.LENGTH_SHORT).show();
+                                Methods.generateToast(appContext, R.string.tv_register_register_failed);
                             }
                         }
                     });
@@ -137,7 +140,7 @@ public class Register extends AppCompatActivity {
     private void sendUserData(){
         FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
         DatabaseReference myRef = firebaseDatabase.getReference(firebaseAuth.getUid());
-        UserDetails userDetails = new UserDetails(Email,ID,age,gender,pregnancy,blood_pressure,diabetes);
+        UserDetails userDetails = new UserDetails(email, id,age,gender,pregnancy,blood_pressure,diabetes);
         myRef.setValue(userDetails);
         Toast.makeText(this, "데이터베이스 업로드 완료", Toast.LENGTH_SHORT).show();
     }
@@ -164,20 +167,32 @@ public class Register extends AppCompatActivity {
         }
     }
 
-    private Boolean allValuesFilled(){
-        Boolean result = false;
-        ID = register_ID.getText().toString();
-        PW = register_PW.getText().toString();
-        Email = register_Email.getText().toString();
+    private boolean allValuesFilled(){
+        id = register_ID.getText().toString();
+        pw = register_PW.getText().toString();
+        email = register_Email.getText().toString();
         age = register_age.getText().toString();
 
-        if(ID.isEmpty() || PW.isEmpty() || Email.isEmpty() || age.isEmpty()){
-            Toast.makeText(this, "모든 항목을 채워주세요", Toast.LENGTH_SHORT).show();
+
+        // check if user filled id, pw and email
+        if (id.isEmpty()) {
+            Methods.generateToast(appContext, R.string.tv_common_id_is_empty);
+            return false;
         }
-        else{
-            result = true;
+        if (pw.isEmpty()) {
+            Methods.generateToast(appContext, R.string.tv_common_pw_is_empty);
+            return false;
         }
-        return result;
+        if (email.isEmpty()){
+            Methods.generateToast(appContext, R.string.tv_common_email_is_empty);
+            return false;
+        }
+        if(age.isEmpty()){
+            Methods.generateToast(appContext, R.string.tv_common_age_is_empty);
+            return false;
+        }
+
+        return true;
     }
 
     private void sendEmailVerification(){
@@ -188,13 +203,13 @@ public class Register extends AppCompatActivity {
                 public void onComplete(@NonNull Task<Void> task) {
                     if(task.isSuccessful()){
                         sendUserData();
-                        Toast.makeText(Register.this, "인증 메일이 전송되었습니다", Toast.LENGTH_SHORT).show();
+                        Methods.generateToast(appContext, R.string.tv_register_verify_email_sent);
                         firebaseAuth.signOut();
                         finish();
                         startActivity(new Intent(Register.this, Login.class));
                     }
                     else{
-                        Toast.makeText(Register.this, "인증 메일 전송이 실패했습니다", Toast.LENGTH_SHORT).show();
+                        Methods.generateToast(appContext, R.string.tv_register_verify_email_sending_failed);
                     }
                 }
             });

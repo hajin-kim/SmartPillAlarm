@@ -25,15 +25,34 @@
 
     // Login Activity 호진
     <string name="btn_login_login">로그인</string>
-    <string name="tv_login_countdown">남은 로그인 횟수: </string>
+    <string name="tv_login_countdown">"남은 로그인 횟수: "</string>
     <string name="tv_login_register">회원가입</string>
     <string name="btn_register_register">회원가입</string>
     <string name="tv_register_already_registered">로그인 페이지로</string>
     <string name="btn_main_logout">로그아웃</string>
+
     <string name="tv_register_userdetails">세부사항을 입력해 주세요</string>
     <string name="checkbox_register_pregnancy">임신</string>
     <string name="checkbox_register_blood_pressure">고혈압</string>
     <string name="checkbox_register_diabetes">당뇨</string>
+
+    <string name="tv_register_register_failed">회원가입에 실패했습니다!</string>
+
+    <string name="tv_register_verify_email_sent">인증 메일이 전송되었습니다</string>
+    <string name="tv_register_verify_email_sending_failed">인증 메일 전송에 실패했습니다</string>
+
+    <string name="tv_login_failure">로그인에 실패했습니다</string>
+    <string name="tv_login_success">로그인 성공</string>
+
+    <string name="tv_common_id_is_empty">아이디를 입력해주세요!</string>
+    <string name="tv_common_pw_is_empty">비밀번호를 입력해주세요!</string>
+    <string name="tv_common_email_is_empty">이메일을 입력해주세요!</string>
+    <string name="tv_common_age_is_empty">만 나이을 입력해주세요!</string>
+
+    <string name="tv_login_waiting">로그인 중. 잠시만 기다려 주십시오.</string>
+    <string name="tv_login_check_your_email">이메일을 확인해 주시기 바랍니다</string>
+    <string name="tv_login_chance_left">"남은 시도 횟수: "</string>
+
 
 
 </resources>

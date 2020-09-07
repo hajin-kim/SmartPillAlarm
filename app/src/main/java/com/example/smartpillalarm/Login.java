@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -28,9 +29,14 @@ public class Login extends AppCompatActivity {
     private TextView login_register;
     private FirebaseAuth firebaseAuth;
     private ProgressDialog progressDialog;
+    private Context appContext;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+//        setTheme(R.style.AppTheme_NoActionBar);
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
@@ -40,7 +46,9 @@ public class Login extends AppCompatActivity {
         login_button = (Button)findViewById(R.id.btn_login_login);
         login_register = (TextView)findViewById(R.id.tv_login_register);
 
-        login_countdown.setText("남은 로그인 횟수: 5");
+        appContext = getApplicationContext();
+
+        login_countdown.setText(getString(R.string.tv_login_chance_left) + "5");
 
         firebaseAuth = FirebaseAuth.getInstance();
         progressDialog = new ProgressDialog(this);
@@ -67,25 +75,36 @@ public class Login extends AppCompatActivity {
         });
     }
 
-    private void validate(String user_ID, String user_PW){
-        progressDialog.setMessage("로그인 중. 잠시만 기다려 주십시오.");
+    private void validate(String user_id, String user_pw){
+
+        // check if user filled id and pw
+        if (user_id.isEmpty()) {
+            Methods.generateToast(appContext, R.string.tv_common_id_is_empty);
+            return;
+        }
+        if (user_pw.isEmpty()) {
+            Methods.generateToast(appContext, R.string.tv_common_pw_is_empty);
+            return;
+        }
+
+        progressDialog.setMessage(getString(R.string.tv_login_waiting));
         progressDialog.show();
 
-        firebaseAuth.signInWithEmailAndPassword(user_ID,user_PW).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+        firebaseAuth.signInWithEmailAndPassword(user_id,user_pw).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if(task.isSuccessful()){
                     progressDialog.dismiss();
-                    Toast.makeText(Login.this,"로그인 성공",Toast.LENGTH_SHORT).show();
-                    //check_email_verification();
+                    Methods.generateToast(appContext, R.string.tv_login_success);
+                    //checkEmailVerification();
                     // email verification 일단 비활성화함
                     startActivity(new Intent(Login.this, MainActivity.class));
                 }
                 else{
                     progressDialog.dismiss();
-                    Toast.makeText(Login.this,"로그인에 실패했습니다",Toast.LENGTH_SHORT).show();
+                    Methods.generateToast(appContext, R.string.tv_login_failure);
                     counter--;
-                    login_countdown.setText("남은 로그인 횟수: " + counter);
+                    login_countdown.setText(getString(R.string.tv_login_chance_left) + counter);
                     if(counter == 0){
                         login_button.setEnabled(false);
                     }
@@ -94,9 +113,9 @@ public class Login extends AppCompatActivity {
         });
     }
 
-    private void check_email_verification(){
+    private void checkEmailVerification(){
         FirebaseUser firebaseUser = firebaseAuth.getInstance().getCurrentUser();
-        Boolean email_verified = firebaseUser.isEmailVerified();
+        boolean email_verified = firebaseUser.isEmailVerified();
         if(email_verified){
             finish();
             startActivity(new Intent(Login.this, MainActivity.class));
