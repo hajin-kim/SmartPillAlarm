@@ -2,6 +2,7 @@ package com.example.smartpillalarm;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.os.Build;
 
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
@@ -88,28 +89,37 @@ public class AlarmDB implements DB {
             };
 
 
-    int num_of_alarm;
+    private int num_of_alarm;
+    private Alarm[] array_alarm;
+    private SharedPreferences sharedPreferences;
 
-    Alarm[] array_alarm;
+    public int getNum_of_alarm() {
+        return num_of_alarm;
+    }
 
-
-    AlarmDB() {
-        num_of_alarm = 0;
-        array_alarm = new Alarm[AlarmDB.MAX_ALARM];
+    private AlarmDB(Context context) {
+        this.num_of_alarm = 0;
+        this.array_alarm = new Alarm[AlarmDB.MAX_ALARM];
+        this.sharedPreferences = context.getSharedPreferences(AlarmDB.DB_NAME, MODE_PRIVATE);
     }
 
 
     // throws exception when the preference has a fault
-    public static AlarmDB getInstance(SharedPreferences sharedPreferences) throws Exception {
-        AlarmDB alarmDB = new AlarmDB();
+    public static AlarmDB getInstance(Context context) {
+        AlarmDB alarmDB = new AlarmDB(context);
 
-        alarmDB.getAlarmPreferences(sharedPreferences);
-        boolean db_is_changed = alarmDB.catchOldAlarm();
-
-        if (db_is_changed) {
-            alarmDB.sortAlarm();
-            alarmDB.putAlarmOnPreferences(sharedPreferences);
+        try {
+            alarmDB.getAlarmPreferences();
+        } catch (Exception e) {
+            Methods.generateToast(context.getApplicationContext(),
+                    R.string.message_on_throw_database_fault);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                context.deleteSharedPreferences(AlarmDB.DB_NAME);
+            }
+            e.printStackTrace();
         }
+
+        alarmDB.updateAndPutPreferences();
 
         return alarmDB;
     }
@@ -120,7 +130,7 @@ public class AlarmDB implements DB {
     }
 
 
-    private void getAlarmPreferences(SharedPreferences sharedPreferences) throws Exception {
+    private void getAlarmPreferences() throws Exception {
         int num_of_alarm = sharedPreferences.getInt(AlarmDB.NUM_OF_ALARM, 0);
 
         this.num_of_alarm = num_of_alarm;
@@ -129,7 +139,7 @@ public class AlarmDB implements DB {
             String alarm_contents = sharedPreferences.getString(AlarmDB.ALARM_CONTENTS[i], null);
             boolean alarm_activated = sharedPreferences.getBoolean(AlarmDB.ALARM_ACTIVATED[i], false);
 
-            if (alarm_time == 0L) throw new Exception("stub!");
+            if (alarm_time == 0L || alarm_contents == null) throw new Exception("stub!");
 
             this.array_alarm[i] = new Alarm(
                     alarm_time,
@@ -140,43 +150,42 @@ public class AlarmDB implements DB {
     }
 
 
-    public void putAlarmOnPreferences(SharedPreferences sharedPreferences) {
+    public void putAlarmOnPreferences() {
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putInt(AlarmDB.NUM_OF_ALARM,
                 num_of_alarm);
         for (int i = 0; i < num_of_alarm; i++) {
             Alarm alarm = array_alarm[i];
             editor.putLong(AlarmDB.ALARM_TIME[i],
-                    alarm.time);
+                    alarm.getTime());
             editor.putString(AlarmDB.ALARM_CONTENTS[i],
-                    alarm.contents);
+                    alarm.getContents());
             editor.putBoolean(AlarmDB.ALARM_ACTIVATED[i],
-                    alarm.activated);
+                    alarm.isActivated());
         }
         editor.apply();
     }
 
 
-    public boolean insertAlarm(long time, String contents, boolean activated, SharedPreferences sharedPreferences) {
+    public boolean insertAlarm(Alarm alarm) {
         if (num_of_alarm >= AlarmDB.MAX_ALARM) return false;
 
-        array_alarm[num_of_alarm] = new Alarm(time, contents, activated);
+        array_alarm[num_of_alarm] = alarm;
         ++num_of_alarm;
 
-        this.catchOldAlarm();
-        this.sortAlarm();
-        this.putAlarmOnPreferences(sharedPreferences);
+        return this.updateAndPutPreferences();
+    }
 
-        return true;
+    public boolean insertAlarm(long time, String contents, boolean activated) {
+        return this.insertAlarm(new Alarm(time, contents, activated));
+    }
+
+    public boolean insertAlarm(Calendar calendar, String contents, boolean activated) {
+        return this.insertAlarm(calendar.getTimeInMillis(), contents, activated);
     }
 
 
-    public boolean insertAlarm(Calendar calendar, String contents, boolean activated, SharedPreferences sharedPreferences) {
-        return insertAlarm(calendar.getTimeInMillis(), contents, activated, sharedPreferences);
-    }
-
-
-    public boolean deleteAlarm(int index, SharedPreferences sharedPreferences) {
+    public boolean deleteAlarm(int index) {
         if (index < 0 || index >= num_of_alarm) return false;
 
         for (int i = index; i < num_of_alarm-1; i++) {
@@ -186,91 +195,39 @@ public class AlarmDB implements DB {
         array_alarm[num_of_alarm-1] = null;
         --num_of_alarm;
 
-        this.catchOldAlarm();
+        return this.updateAndPutPreferences();
+    }
+
+
+    public boolean updateAndPutPreferences() {
+        Calendar current_calendar = Calendar.getInstance();
+
+        for (int i = 0; i < num_of_alarm; ++i) {
+            array_alarm[i].updateAlarmDate(current_calendar);
+        }
+
         this.sortAlarm();
-        this.putAlarmOnPreferences(sharedPreferences);
+        this.putAlarmOnPreferences();
 
         return true;
     }
 
 
-    public Alarm getEarliestAlarm() {
-        return getEarliestAlarm(true);
-    }
-
     public Alarm getEarliestAlarm(boolean ignore_disabled_alarm) {
         for (int i = 0; i < num_of_alarm; i++) {
-            if (array_alarm[i].activated || !ignore_disabled_alarm) return array_alarm[i];
+            if (array_alarm[i].isActivated() || !ignore_disabled_alarm) return array_alarm[i];
         }
         return null;
     }
 
-
-    public boolean catchOldAlarm() {
-        boolean db_is_changed = false;
-
-        int num_of_alarm = this.num_of_alarm;
-        Calendar current_calendar = Calendar.getInstance();
-
-        for (int i = 0; i < num_of_alarm; ++i) {
-            Alarm alarm = this.array_alarm[i];
-
-            Calendar nextNotifyTime = Calendar.getInstance();
-            nextNotifyTime.setTimeInMillis(alarm.time);
-
-            /*
-            this algorithm should be optimized
-            H.K.
-             */
-            // if alarm date is before current time
-            while (current_calendar.after(nextNotifyTime)) {
-                db_is_changed = true;
-                nextNotifyTime.add(Calendar.DATE, 1);
-
-//                // show a toast message for the new alarm
-//                Methods.generateDateToast(context, R.string.message_alarm_generated, nextNotifyTime.getTime());
-            }
-
-            this.array_alarm[i].time = nextNotifyTime.getTimeInMillis();
-        }
-
-        return db_is_changed;
-    }
-
-
-    // DEV CODE
-    public static void printAlarmDB(Context context, AlarmDB alarmDB) {
-        SharedPreferences sharedPreferences = context.getSharedPreferences(DB_NAME, MODE_PRIVATE);
-
-        int num_of_alarms = sharedPreferences.getInt(NUM_OF_ALARM, 0);
-        System.out.println("## print all alarms (containing " + num_of_alarms + ")");
-        for (int i = 0; i < num_of_alarms; ++i) {
-            Alarm alarm = alarmDB.array_alarm[i];
-
-            String date_text = new SimpleDateFormat(context.getResources().getString(R.string.simple_date_format), Locale.getDefault())
-                    .format(alarm.time);
-
-            System.out.println("# alarm " + i);
-
-            System.out.println(date_text);
-            System.out.println(alarm.activated);
-            System.out.println(alarm.contents);
-        }
+    public Alarm getEarliestAlarm() {
+        return getEarliestAlarm(true);
     }
 
 
     // DEV CODE
     public static void printAlarmDB(Context context) {
-        SharedPreferences sharedPreferences = context.getSharedPreferences(DB_NAME, MODE_PRIVATE);
-
-        AlarmDB alarmDB = null;
-        try {
-            alarmDB = getInstance(sharedPreferences);
-        } catch (Exception e) {
-            System.out.println("preference has a fault!");
-            e.printStackTrace();
-            return;
-        }
+        AlarmDB alarmDB = getInstance(context);
 
         int num_of_alarms = alarmDB.num_of_alarm;
         System.out.println("## print all alarms (containing " + num_of_alarms + ")");
@@ -278,13 +235,13 @@ public class AlarmDB implements DB {
             Alarm alarm = alarmDB.array_alarm[i];
 
             String date_text = new SimpleDateFormat(context.getResources().getString(R.string.simple_date_format), Locale.getDefault())
-                    .format(alarm.time);
+                    .format(alarm.getTime());
 
             System.out.println("# alarm " + i);
 
             System.out.println(date_text);
-            System.out.println(alarm.activated);
-            System.out.println(alarm.contents);
+            System.out.println(alarm.getContents());
+            System.out.println(alarm.isActivated());
         }
     }
 }

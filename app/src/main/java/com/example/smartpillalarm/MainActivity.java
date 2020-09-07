@@ -18,6 +18,7 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.zxing.BarcodeFormat;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
@@ -26,6 +27,7 @@ public class MainActivity extends AppCompatActivity {
     private Button logout_button;
     private Button profile_button;
     private Button scan_button;
+    private Context appContext;
     private FirebaseAuth firebaseAuth;
 
     @Override
@@ -38,6 +40,7 @@ public class MainActivity extends AppCompatActivity {
         logout_button = findViewById(R.id.btn_main_logout);
         profile_button = findViewById(R.id.btn_main_profile);
         scan_button = findViewById(R.id.btn_main_scan);
+        appContext = getApplicationContext();
 
         final Context context = this;
 
@@ -65,27 +68,17 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        // DEV CODE
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             deleteSharedPreferences(AlarmDB.DB_NAME);
         }
-        //
 
         // DEV CODE
-        AlarmDB.printAlarmDB(this);
-        //Methods.printNextAlarm(getApplicationContext());
+        AlarmDB.printAlarmDB(appContext);
+//        Methods.printNextAlarm(appContext);
 
-        AlarmDB alarmDB = null;
-
-        try {
-            alarmDB = AlarmDB.getInstance(getSharedPreferences(AlarmDB.DB_NAME, MODE_PRIVATE));
-        } catch (Exception e) {
-            Methods.generateDateToast(getApplicationContext(),
-                    R.string.message_on_throw_database_fault);
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                deleteSharedPreferences(AlarmDB.DB_NAME);
-            }
-            return;
-        }
+        // renew
+//        AlarmDB.getInstance(appContext);
 
         final Button button_start = findViewById(R.id.button_start);
         button_start.setOnClickListener(new View.OnClickListener() {
@@ -133,6 +126,24 @@ public class MainActivity extends AppCompatActivity {
         IntentResult result = IntentIntegrator.parseActivityResult(requestCode,resultCode,data);
         if(result != null){
             if(result.getContents() != null){
+//                Toast.makeText(getApplicationContext(), result.getFormatName(), Toast.LENGTH_SHORT).show();
+
+                // get barcode format
+                switch (BarcodeFormat.valueOf(result.getFormatName())) {
+                    case EAN_13:
+                        Toast.makeText(this, BarcodeFormat.EAN_13 + result.getContents(), Toast.LENGTH_SHORT).show();
+
+                    case DATA_MATRIX:
+//                        Toast.makeText(this, result.getContents(), Toast.LENGTH_SHORT).show();
+                        break;
+
+                    default:
+//                        Toast.makeText(this, "인식할 수 없는 바코드입니다!", Toast.LENGTH_SHORT);
+                        Toast.makeText(this, result.getFormatName(), Toast.LENGTH_SHORT).show();
+
+                }
+
+//                Toast.makeText(this, result.getContents(), Toast.LENGTH_SHORT).show();
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
                 builder.setMessage(result.getContents());
                 builder.setTitle("스캔 결과");
