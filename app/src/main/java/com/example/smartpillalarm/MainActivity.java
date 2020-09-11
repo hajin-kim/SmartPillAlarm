@@ -11,6 +11,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 //import androidx.appcompat.widget.Toolbar;
 
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -22,8 +23,15 @@ import com.google.zxing.BarcodeFormat;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.nio.charset.Charset;
+
 public class MainActivity extends AppCompatActivity {
 
+    private static final String TAG = "MainActivity";
     private Button logout_button;
     private Button profile_button;
     private Button scan_button;
@@ -124,9 +132,11 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data){
         IntentResult result = IntentIntegrator.parseActivityResult(requestCode,resultCode,data);
+        String productCode = "NULL";
+
         if(result != null){
             if(result.getContents() != null){
-//                Toast.makeText(getApplicationContext(), result.getFormatName(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), result.getFormatName(), Toast.LENGTH_SHORT).show();
 
                 // get barcode format
                 switch (BarcodeFormat.valueOf(result.getFormatName())) {
@@ -134,18 +144,24 @@ public class MainActivity extends AppCompatActivity {
                         Toast.makeText(this, BarcodeFormat.EAN_13 + result.getContents(), Toast.LENGTH_SHORT).show();
 
                     case DATA_MATRIX:
-//                        Toast.makeText(this, result.getContents(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, result.getContents(), Toast.LENGTH_SHORT).show();
                         break;
 
                     default:
-//                        Toast.makeText(this, "인식할 수 없는 바코드입니다!", Toast.LENGTH_SHORT);
+                        Toast.makeText(this, "인식할 수 없는 바코드입니다!", Toast.LENGTH_SHORT);
                         Toast.makeText(this, result.getFormatName(), Toast.LENGTH_SHORT).show();
 
                 }
 
+                try {
+                    productCode = searchProdCode(result.getContents());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
 //                Toast.makeText(this, result.getContents(), Toast.LENGTH_SHORT).show();
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                builder.setMessage(result.getContents());
+                builder.setMessage("제품코드: "+productCode);
                 builder.setTitle("스캔 결과");
                 builder.setPositiveButton("재시도", new DialogInterface.OnClickListener() {
                     @Override
@@ -169,4 +185,31 @@ public class MainActivity extends AppCompatActivity {
             super.onActivityResult(requestCode,resultCode,data);
         }
     }
+
+    private String searchProdCode(String barcode) throws IOException {
+        String prodCode = "NULL";  // returns corresponding product code
+        Integer count = 0;
+
+        InputStream inputStream = getResources().openRawResource(R.raw.codepairs);
+        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream, Charset.forName("UTF-8")));
+
+        String line;
+        while((line = bufferedReader.readLine()) != null) {
+            count++;
+            // Split by ","
+            String[] tokens = line.split(",");
+
+            if (tokens[1].substring(1).equals(barcode)) {
+                prodCode = tokens[0].substring(1);  // get rid of "'" ex) '1234 => 1234
+                Toast.makeText(this, "Found: "+prodCode, Toast.LENGTH_SHORT).show();
+                Log.d(TAG, "Finished: "+prodCode);
+                break;
+            }
+            else{
+                Log.d(TAG, "Iter: "+count+" Current: "+tokens[1].substring(1)+" Objective: "+barcode);
+            }
+        }
+        return prodCode;
+    }
+
 }
