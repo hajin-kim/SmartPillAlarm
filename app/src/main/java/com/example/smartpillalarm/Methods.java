@@ -101,10 +101,12 @@ public class Methods {
 
 
     public static StringBuilder getAPIResponse(String productCode) throws IOException {
-        String serviceKey = "r1uAyYmY3oR5pYyYwVAuUv%2FYqWVfqRmNNFWGEcsTqkABJmUp1CdLyPOWB5PLTnTQPGRduGwrjvr2Dxwp59mMYA%3D%3D";
+//        String serviceKey = "r1uAyYmY3oR5pYyYwVAuUv%2FYqWVfqRmNNFWGEcsTqkABJmUp1CdLyPOWB5PLTnTQPGRduGwrjvr2Dxwp59mMYA%3D%3D".replace("%2F", "/").replace("%3D", "=");
+        String serviceKey = "r1uAyYmY3oR5pYyYwVAuUv/YqWVfqRmNNFWGEcsTqkABJmUp1CdLyPOWB5PLTnTQPGRduGwrjvr2Dxwp59mMYA==";
         StringBuilder urlBuilder = new StringBuilder("http://apis.data.go.kr/1471057/MdcinPrductPrmisnInfoService/getMdcinPrductItem"); /*URL*/
 //        urlBuilder.append("?" + URLEncoder.encode("ServiceKey","UTF-8") + "=서비스키"); /*Service Key*/
-        urlBuilder.append("&" + URLEncoder.encode("ServiceKey","UTF-8") + "=" + URLEncoder.encode(serviceKey, "UTF-8")); /*Service Key*/
+//        urlBuilder.append("&" + URLEncoder.encode("ServiceKey","UTF-8") + "=" + URLEncoder.encode(serviceKey, "UTF-8")); /*Service Key*/
+        urlBuilder.append("&" + URLEncoder.encode("ServiceKey","UTF-8") + "=" + serviceKey); /*Service Key*/
 //        urlBuilder.append("&" + URLEncoder.encode("item_name","UTF-8") + "=" + URLEncoder.encode("종근당염산에페드린정", "UTF-8")); /*품목명*/
 //        urlBuilder.append("&" + URLEncoder.encode("entp_name","UTF-8") + "=" + URLEncoder.encode("(주)종근당", "UTF-8")); /*업체명*/
 //        urlBuilder.append("&" + URLEncoder.encode("item_permit_date","UTF-8") + "=" + URLEncoder.encode("19550117", "UTF-8")); /*허가일자*/

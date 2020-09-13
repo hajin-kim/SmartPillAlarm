@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#ffffff"
+    tools:context=".ui.home.HomeFragment">
+
+    <!--모든배경색 defaultbackgrnd,#여기에 singlerowcalendar 추가. 일단 빠짐.add버튼 애니메이션 추가-->
+
+    <TextView
+        android:id="@+id/tvDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:fontFamily="sans-serif-medium"
+        android:background="#ffffff"
+        android:text="SELECT A DATE"
+        android:textColor="@color/colorAccent"
+        android:textSize="24sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tvDay"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="2dp"
+        android:fontFamily="sans-serif-medium"
+        android:textColor="@color/colorG2"
+        android:text="imsi"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="@+id/tvDate"
+        app:layout_constraintStart_toEndOf="@+id/tvDate"
+        app:layout_constraintTop_toTopOf="@+id/tvDate" />
+
+    <Button
+        android:id="@+id/btnRight"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginEnd="16dp"
+        android:background="@drawable/ic_arrow_right_24"
+        app:layout_constraintBottom_toBottomOf="@+id/tvDate"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/tvDate" />
+
+    <Button
+        android:id="@+id/btnLeft"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:background="@drawable/ic_arrow_left_24"
+        app:layout_constraintBottom_toBottomOf="@+id/btnRight"
+        app:layout_constraintEnd_toStartOf="@+id/btnRight"
+        app:layout_constraintTop_toTopOf="@+id/btnRight" />
+
+    <ImageView
+        android:id="@+id/imageView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/fakecalendar"
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="63dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintVertical_bias="0.002"
+        app:layout_constraintTop_toBottomOf="@+id/tvDate" />
+
+    <Button
+        android:id="@+id/btnAdd"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:background="@drawable/ic_baseline_add_box_24"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.9"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.9" />
+
+
+    <TextView
+        android:id="@+id/text_home"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:textAlignment="center"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>
