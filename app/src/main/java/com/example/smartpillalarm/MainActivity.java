@@ -212,7 +212,7 @@ public class MainActivity extends AppCompatActivity {
         String key = barcode.substring(7);
         Integer count = 0;
 
-        InputStream inputStream = getResources().openRawResource(getRawID(title));
+        InputStream inputStream = getResources().openRawResource(getRawID("c" + title));
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream, Charset.forName("UTF-8")));
 
         String line;
