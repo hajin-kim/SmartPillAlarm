@@ -2,10 +2,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.smartpillalarm">
 
-    <uses-permission android:name="android.permission.CAMERA"/>
+    <uses-permission android:name="android.permission.CAMERA" />
 
-    <uses-feature android:name="android.hardware.camera"/>
-    <uses-feature android:name="android.hardware.camera.autofocus"/>
+    <uses-feature android:name="android.hardware.camera" />
+    <uses-feature android:name="android.hardware.camera.autofocus" />
 
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
@@ -16,13 +16,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar">
-
-        <!--    devjhp, merge on Sep. 13.-->
+        <!-- devjhp, merge on Sep. 13. -->
         <activity
             android:name=".ActivityBottomMenu"
-            android:label="@string/title_activity_home"></activity>
-        <!--    done-->
-        <activity android:name=".UpdateProfile"></activity>
+            android:label="@string/title_activity_home" /> <!-- done -->
+        <activity android:name=".UpdateProfile" />
         <activity android:name=".Profile" />
         <activity android:name=".Register" />
         <activity android:name=".Login">
@@ -40,8 +38,7 @@
             android:name=".CaptureAct"
             android:screenOrientation="fullSensor"
             android:stateNotNeeded="true"
-            android:windowSoftInputMode="stateAlwaysHidden">
-        </activity>
+            android:windowSoftInputMode="stateAlwaysHidden"></activity>
 
         <receiver android:name=".AlarmReceiver" />
         <receiver

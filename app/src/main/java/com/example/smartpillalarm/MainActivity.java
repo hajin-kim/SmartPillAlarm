@@ -28,6 +28,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.StringReader;
+import java.lang.reflect.Field;
 import java.nio.charset.Charset;
 
 public class MainActivity extends AppCompatActivity {
@@ -161,7 +162,7 @@ public class MainActivity extends AppCompatActivity {
                 try {
                     productCode = searchProdCode(codeFound);
                     String response = Methods.getAPIResponse(productCode).toString();
-                } catch (IOException e) {
+                } catch (IOException | IllegalAccessException e) {
                     e.printStackTrace();
                 }
 
@@ -194,27 +195,41 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private String searchProdCode(String barcode) throws IOException {
+    private Integer getRawID(String title) throws IllegalAccessException {
+        Integer RawID = 0;
+        Field[] fields=R.raw.class.getFields();
+        for(int count=0; count < fields.length; count++){
+            if(title.equals(fields[count].getName())){
+                RawID = fields[count].getInt(fields[count]);
+            }
+        }
+        return RawID;
+    }
+
+    private String searchProdCode(String barcode) throws IOException, IllegalAccessException {
         String prodCode = "NULL";  // returns corresponding product code
+        String title = barcode.substring(3,7);
+        String key = barcode.substring(7);
         Integer count = 0;
 
-        InputStream inputStream = getResources().openRawResource(R.raw.codepairs);
+        InputStream inputStream = getResources().openRawResource(getRawID(title));
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream, Charset.forName("UTF-8")));
 
         String line;
         while((line = bufferedReader.readLine()) != null) {
+            bufferedReader.readLine(); // skip first line
             count++;
             // Split by ","
             String[] tokens = line.split(",");
-
-            if (tokens[1].substring(1).equals(barcode)) {
-                prodCode = tokens[0].substring(1);  // get rid of "'" ex) '1234 => 1234
+            String compCode = "880"+title+tokens[1].substring(1); // ex) 880+0500+000102
+            if (compCode.equals(barcode)) {
+                prodCode = tokens[2].substring(1);  // get rid of "'" ex) '1234 => 1234
                 Toast.makeText(this, "Found: "+prodCode, Toast.LENGTH_SHORT).show();
                 Log.d(TAG, "Finished: "+prodCode);
                 break;
             }
             else{
-                Log.d(TAG, "Iter: "+count+" Current: "+tokens[1].substring(1)+" Objective: "+barcode);
+                Log.d(TAG, "Iter: "+count+" Current: "+tokens[2].substring(1)+" Objective: "+barcode);
             }
         }
         return prodCode;
