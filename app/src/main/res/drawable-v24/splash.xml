@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:drawable="@color/colorPrimary" />
+    <item android:drawable="@mipmap/ic_launcher" android:gravity="center" />
+
+    <!--    devjhp, merge on Sep. 13.-->
+    <!--    WARNING: THIS TAG IS NOT ALLOWED HERE-->
+<!--    <androidx.constraintlayout.widget.ConstraintLayout-->
+<!--        xmlns:android="http://schemas.android.com/apk/res/android"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="match_parent">-->
+
+<!--    </androidx.constraintlayout.widget.ConstraintLayout>-->
+    <!--    done-->
+</layer-list>

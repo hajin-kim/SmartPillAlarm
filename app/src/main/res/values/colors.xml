@@ -1,11 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+<!--&lt;!&ndash;    original, merge on Sep. 13.&ndash;&gt;-->
+<!--    <color name="colorPrimary">@android:color/holo_blue_dark</color>-->
+<!--    <color name="colorPrimaryDark">#3700B3</color>-->
+<!--    <color name="colorAccent">#03DAC5</color>-->
+<!--    <color name="colorDefaultBackground">#ffffff</color>-->
+<!--&lt;!&ndash;    done&ndash;&gt;-->
+
+    <!--    devjhp, merge on Sep. 13.-->
     <color name="colorPrimary">#91BEDF</color>
     <color name="colorPrimaryDark">#659DC2</color>
     <color name="colorAccent">#C4C5CA</color>
     <color name="colorG2">#D9DCE3</color>
     <color name="colorDefaultBackground">#F5F6FA</color>
 
-
+    <!--somethinsomethin-->
+<!--    done-->
     <color name="black_overlay">#66000000</color>
 </resources>

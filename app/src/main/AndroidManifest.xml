@@ -1,9 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.smartpillalarm">
-    <uses-permission android:name="android.permission.CAMERA"/>
-    <uses-feature android:name="android.hardware.camera"/>
-    <uses-feature android:name="android.hardware.camera.autofocus"/>
+
+    <uses-permission android:name="android.permission.CAMERA" />
+
+    <uses-feature android:name="android.hardware.camera" />
+    <uses-feature android:name="android.hardware.camera.autofocus" />
+
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
     <application
         android:allowBackup="true"
@@ -12,7 +16,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar">
-        <activity android:name=".UpdateProfile"></activity>
+        <!-- devjhp, merge on Sep. 13. -->
+        <activity
+            android:name=".ActivityBottomMenu"
+            android:label="@string/title_activity_home" /> <!-- done -->
+        <activity android:name=".UpdateProfile" />
         <activity android:name=".Profile" />
         <activity android:name=".Register" />
         <activity android:name=".Login">
@@ -26,11 +34,11 @@
             android:name=".MainActivity"
             android:theme="@style/SplashTheme" />
         <activity android:name=".AlarmGeneratorActivity" />
-        <activity android:name=".CaptureAct"
+        <activity
+            android:name=".CaptureAct"
             android:screenOrientation="fullSensor"
             android:stateNotNeeded="true"
-            android:windowSoftInputMode="stateAlwaysHidden">
-        </activity>
+            android:windowSoftInputMode="stateAlwaysHidden"></activity>
 
         <receiver android:name=".AlarmReceiver" />
         <receiver
@@ -41,7 +49,5 @@
             </intent-filter>
         </receiver>
     </application>
-
-    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
 </manifest>

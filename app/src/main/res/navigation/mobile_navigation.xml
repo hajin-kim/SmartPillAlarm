@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@id/homeFragment2">
+
+    <fragment
+        android:id="@+id/settingsFragment"
+        android:name="com.example.smartpillalarm.ui.settings.SettingsFragment"
+        android:label="fragment_settings"
+        tools:layout="@layout/fragment_settings" />
+    <fragment
+        android:id="@+id/mystatsFragment"
+        android:name="com.example.smartpillalarm.ui.mystats.MystatsFragment"
+        android:label="fragment_mystats"
+        tools:layout="@layout/fragment_mystats" />
+    <fragment
+        android:id="@+id/newsfeedFragment"
+        android:name="com.example.smartpillalarm.ui.newsfeed.NewsfeedFragment"
+        android:label="fragment_newsfeed"
+        tools:layout="@layout/fragment_newsfeed" />
+    <fragment
+        android:id="@+id/homeFragment2"
+        android:name="com.example.smartpillalarm.ui.home.HomeFragment"
+        android:label="fragment_home"
+        tools:layout="@layout/fragment_home" />
+</navigation>

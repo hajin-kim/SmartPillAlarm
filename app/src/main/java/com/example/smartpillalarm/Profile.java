@@ -59,7 +59,7 @@ public class Profile extends AppCompatActivity {
         profile_update.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                finish();
+//                finish();
                 startActivity(new Intent(Profile.this, UpdateProfile.class));
             }
         });
