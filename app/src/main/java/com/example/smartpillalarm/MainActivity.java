@@ -66,7 +66,7 @@ public class MainActivity extends AppCompatActivity {
         profile_button.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view){
-                finish();
+                //finish();
                 startActivity(new Intent(MainActivity.this, Profile.class));
             }
         });
@@ -216,8 +216,8 @@ public class MainActivity extends AppCompatActivity {
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream, Charset.forName("UTF-8")));
 
         String line;
+        bufferedReader.readLine(); // skip first line
         while((line = bufferedReader.readLine()) != null) {
-            bufferedReader.readLine(); // skip first line
             count++;
             // Split by ","
             String[] tokens = line.split(",");
@@ -229,7 +229,7 @@ public class MainActivity extends AppCompatActivity {
                 break;
             }
             else{
-                Log.d(TAG, "Iter: "+count+" Current: "+tokens[2].substring(1)+" Objective: "+barcode);
+                Log.d(TAG, "Iter: "+count+" Current: "+compCode+" Objective: "+barcode);
             }
         }
         return prodCode;

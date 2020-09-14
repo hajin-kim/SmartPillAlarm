@@ -113,9 +113,7 @@ public class Register extends AppCompatActivity {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if(task.isSuccessful()) {
-                                //sendEmailVerification();
                                 sendUserData();
-                                //firebaseAuth.signOut();
                                 finish();
                                 startActivity(new Intent(Register.this, Login.class));
                             }
@@ -131,6 +129,7 @@ public class Register extends AppCompatActivity {
         register_already_registered.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view){
+                finish();
                 startActivity(new Intent(Register.this, Login.class));
             }
         });
