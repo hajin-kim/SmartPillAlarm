@@ -27,6 +27,8 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.StringReader;
+import java.lang.reflect.Field;
 import java.nio.charset.Charset;
 
 public class MainActivity extends AppCompatActivity {
@@ -64,7 +66,7 @@ public class MainActivity extends AppCompatActivity {
         profile_button.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view){
-                finish();
+                //finish();
                 startActivity(new Intent(MainActivity.this, Profile.class));
             }
         });
@@ -138,24 +140,29 @@ public class MainActivity extends AppCompatActivity {
             if(result.getContents() != null){
                 Toast.makeText(getApplicationContext(), result.getFormatName(), Toast.LENGTH_SHORT).show();
 
+                String codeFound = result.getContents();
                 // get barcode format
                 switch (BarcodeFormat.valueOf(result.getFormatName())) {
                     case EAN_13:
-                        Toast.makeText(this, BarcodeFormat.EAN_13 + result.getContents(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(appContext, BarcodeFormat.EAN_13 + " " + codeFound, Toast.LENGTH_SHORT).show();
+//                        codeFound = result.getContents();
+                        break;
 
                     case DATA_MATRIX:
-                        Toast.makeText(this, result.getContents(), Toast.LENGTH_SHORT).show();
+                        codeFound = codeFound.substring(4, 4+13);
+                        Toast.makeText(appContext, BarcodeFormat.DATA_MATRIX + " " + codeFound, Toast.LENGTH_SHORT).show();
                         break;
 
                     default:
-                        Toast.makeText(this, "인식할 수 없는 바코드입니다!", Toast.LENGTH_SHORT);
-                        Toast.makeText(this, result.getFormatName(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(appContext, "인식할 수 없는 바코드입니다!", Toast.LENGTH_SHORT);
+                        Toast.makeText(appContext, result.getFormatName(), Toast.LENGTH_SHORT).show();
 
                 }
 
                 try {
-                    productCode = searchProdCode(result.getContents());
-                } catch (IOException e) {
+                    productCode = searchProdCode(codeFound);
+                    String response = Methods.getAPIResponse(productCode).toString();
+                } catch (IOException | IllegalAccessException e) {
                     e.printStackTrace();
                 }
 
@@ -176,6 +183,8 @@ public class MainActivity extends AppCompatActivity {
                 });
                 AlertDialog dialog = builder.create();
                 dialog.show();
+                Toast.makeText(appContext, codeFound, Toast.LENGTH_SHORT).show();
+                System.out.println("BARCODE TEST "+codeFound);
             }
             else{
                 Toast.makeText(this, "결과 없음", Toast.LENGTH_SHORT).show();
@@ -186,27 +195,41 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private String searchProdCode(String barcode) throws IOException {
+    private Integer getRawID(String title) throws IllegalAccessException {
+        Integer RawID = 0;
+        Field[] fields=R.raw.class.getFields();
+        for(int count=0; count < fields.length; count++){
+            if(title.equals(fields[count].getName())){
+                RawID = fields[count].getInt(fields[count]);
+            }
+        }
+        return RawID;
+    }
+
+    private String searchProdCode(String barcode) throws IOException, IllegalAccessException {
         String prodCode = "NULL";  // returns corresponding product code
+        String title = barcode.substring(3,7);
+        String key = barcode.substring(7);
         Integer count = 0;
 
-        InputStream inputStream = getResources().openRawResource(R.raw.codepairs);
+        InputStream inputStream = getResources().openRawResource(getRawID("c" + title));
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream, Charset.forName("UTF-8")));
 
         String line;
+        bufferedReader.readLine(); // skip first line
         while((line = bufferedReader.readLine()) != null) {
             count++;
             // Split by ","
             String[] tokens = line.split(",");
-
-            if (tokens[1].substring(1).equals(barcode)) {
-                prodCode = tokens[0].substring(1);  // get rid of "'" ex) '1234 => 1234
+            String compCode = "880"+title+tokens[1].substring(1); // ex) 880+0500+000102
+            if (compCode.equals(barcode)) {
+                prodCode = tokens[2].substring(1);  // get rid of "'" ex) '1234 => 1234
                 Toast.makeText(this, "Found: "+prodCode, Toast.LENGTH_SHORT).show();
                 Log.d(TAG, "Finished: "+prodCode);
                 break;
             }
             else{
-                Log.d(TAG, "Iter: "+count+" Current: "+tokens[1].substring(1)+" Objective: "+barcode);
+                Log.d(TAG, "Iter: "+count+" Current: "+compCode+" Objective: "+barcode);
             }
         }
         return prodCode;

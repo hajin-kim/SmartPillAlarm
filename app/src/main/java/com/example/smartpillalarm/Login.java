@@ -63,20 +63,20 @@ public class Login extends AppCompatActivity {
         login_button.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view){
-                validate(login_ID.getText().toString(), login_PW.getText().toString());
+                validate(login_ID.getText().toString().trim(), login_PW.getText().toString().trim());
             }
         });
 
         login_register.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view){
+                finish();
                 startActivity(new Intent(Login.this, Register.class));
             }
         });
     }
 
     private void validate(String user_id, String user_pw){
-
         // check if user filled id and pw
         if (user_id.isEmpty()) {
             Methods.generateToast(appContext, R.string.tv_common_id_is_empty);
@@ -89,7 +89,6 @@ public class Login extends AppCompatActivity {
 
         progressDialog.setMessage(getString(R.string.tv_login_waiting));
         progressDialog.show();
-
         firebaseAuth.signInWithEmailAndPassword(user_id,user_pw).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
@@ -97,7 +96,6 @@ public class Login extends AppCompatActivity {
                     progressDialog.dismiss();
                     Methods.generateToast(appContext, R.string.tv_login_success);
                     //checkEmailVerification();
-                    // email verification 일단 비활성화함
                     startActivity(new Intent(Login.this, MainActivity.class));
                 }
                 else{
