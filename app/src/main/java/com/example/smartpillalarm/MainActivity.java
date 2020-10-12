@@ -144,27 +144,33 @@ public class MainActivity extends AppCompatActivity {
                 // get barcode format
                 switch (BarcodeFormat.valueOf(result.getFormatName())) {
                     case EAN_13:
-                        Toast.makeText(appContext, BarcodeFormat.EAN_13 + " " + codeFound, Toast.LENGTH_SHORT).show();
 //                        codeFound = result.getContents();
+//                        Toast.makeText(appContext, BarcodeFormat.EAN_13 + " " + codeFound, Toast.LENGTH_SHORT).show();
                         break;
 
                     case DATA_MATRIX:
                         codeFound = codeFound.substring(4, 4+13);
-                        Toast.makeText(appContext, BarcodeFormat.DATA_MATRIX + " " + codeFound, Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(appContext, BarcodeFormat.DATA_MATRIX + " " + codeFound, Toast.LENGTH_SHORT).show();
                         break;
 
                     default:
-                        Toast.makeText(appContext, "인식할 수 없는 바코드입니다!", Toast.LENGTH_SHORT);
                         Toast.makeText(appContext, result.getFormatName(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(appContext, "인식할 수 없는 바코드입니다!", Toast.LENGTH_SHORT).show();
 
                 }
 
+                String response = "";
                 try {
                     productCode = searchProdCode(codeFound);
-                    String response = Methods.getAPIResponse(productCode).toString();
+                    response = Methods.getAPIResponse(productCode).toString();
                 } catch (IOException | IllegalAccessException e) {
                     e.printStackTrace();
+                    System.out.println("Error found");
+                    Toast.makeText(appContext, "Error found", Toast.LENGTH_SHORT).show();
+
                 }
+
+                System.out.println(response);
 
 //                Toast.makeText(this, result.getContents(), Toast.LENGTH_SHORT).show();
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -183,7 +189,7 @@ public class MainActivity extends AppCompatActivity {
                 });
                 AlertDialog dialog = builder.create();
                 dialog.show();
-                Toast.makeText(appContext, codeFound, Toast.LENGTH_SHORT).show();
+//                Toast.makeText(appContext, codeFound, Toast.LENGTH_SHORT).show();
                 System.out.println("BARCODE TEST "+codeFound);
             }
             else{

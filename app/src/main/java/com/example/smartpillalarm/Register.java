@@ -53,6 +53,7 @@ public class Register extends AppCompatActivity {
         checkbox_diabetes = (CheckBox)findViewById(R.id.checkbox_register_diabetes);
         checkbox_pregnancy = (CheckBox)findViewById(R.id.checkbox_register_pregnancy);
         checkbox_pregnancy.setEnabled(false);
+        appContext = getApplicationContext();
     }
 
     @Override
