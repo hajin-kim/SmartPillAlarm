@@ -87,6 +87,19 @@ public class MainActivity extends AppCompatActivity {
         AlarmDB.printAlarmDB(appContext);
 //        Methods.printNextAlarm(appContext);
 
+        // DEV CODE
+//        try {
+//            String productCode = "199903739";
+//            System.out.println("Start getAPI");
+//            Methods.getAPIResponse(getApplicationContext(), productCode);
+//            System.out.println("Done getAPI");
+//        } catch (IOException e) {
+//            System.out.println("Tracing getAPI");
+//            e.printStackTrace();
+//            System.out.println("Error found");
+//            Toast.makeText(appContext, "Error found", Toast.LENGTH_SHORT).show();
+//        }
+
         // renew
 //        AlarmDB.getInstance(appContext);
 
@@ -162,15 +175,16 @@ public class MainActivity extends AppCompatActivity {
                 String response = "";
                 try {
                     productCode = searchProdCode(codeFound);
-                    response = Methods.getAPIResponse(productCode).toString();
+                    System.out.println("Start getAPI");
+                    response = Methods.getAPIResponse(getApplicationContext(), productCode);
+                    System.out.println("Done getAPI");
                 } catch (IOException | IllegalAccessException e) {
+                    System.out.println("Tracing getAPI");
                     e.printStackTrace();
                     System.out.println("Error found");
                     Toast.makeText(appContext, "Error found", Toast.LENGTH_SHORT).show();
 
                 }
-
-                System.out.println(response);
 
 //                Toast.makeText(this, result.getContents(), Toast.LENGTH_SHORT).show();
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
