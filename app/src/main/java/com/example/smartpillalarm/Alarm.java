@@ -6,11 +6,24 @@ public class Alarm implements Comparable<Alarm> {
     private long time;
     private String contents;
     private boolean activated;
+    private String drugName;
+    private String drugProdCode;
+
 
     public Alarm(long time, String contents, boolean activated) {
         this.time = time;
         this.contents = contents;
         this.activated = activated;
+        drugName = null;
+        drugProdCode = null;
+    }
+
+    public Alarm(long time, String contents, boolean activated, String drugName, String drugProdCode) {
+        this.time = time;
+        this.contents = contents;
+        this.activated = activated;
+        this.drugName = drugName;
+        this.drugProdCode = drugProdCode;
     }
 
     @Override
@@ -31,11 +44,20 @@ public class Alarm implements Comparable<Alarm> {
         return activated;
     }
 
+    public String getDrugName() {
+        return drugName;
+    }
+
+    public String getDrugProdCode() {
+        return drugProdCode;
+    }
+
     public void updateAlarmDate(Calendar current_calendar) {
         Calendar nextNotifyTime = Calendar.getInstance();
         nextNotifyTime.setTimeInMillis(time);
 
         /*
+        TODO:
         this algorithm should be optimized
         H.K.
          */

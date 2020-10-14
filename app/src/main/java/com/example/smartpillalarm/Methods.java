@@ -160,7 +160,6 @@ public class Methods {
 //        urlBuilder.append("&" + URLEncoder.encode("start_change_date","UTF-8") + "=" + URLEncoder.encode("20151216", "UTF-8")); /*변경일자시작일*/
 //        urlBuilder.append("&" + URLEncoder.encode("end_change_date","UTF-8") + "=" + URLEncoder.encode("20160101", "UTF-8")); /*변경일자종료일*/
 
-
         // Instantiate the RequestQueue.
         RequestQueue queue = Volley.newRequestQueue(appContext);
 
@@ -204,7 +203,6 @@ public class Methods {
 
         // Add the request to the RequestQueue.
         queue.add(stringRequest);
-
 
 //        URL url = new URL(urlBuilder.toString());
 //        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
