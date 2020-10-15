@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
+import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -27,8 +28,12 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import org.xmlpull.v1.XmlPullParser;
+
 import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
@@ -36,9 +41,12 @@ import java.net.URL;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
 import java.util.Map;
+
+import static android.content.ContentValues.TAG;
 
 public class Methods {
 
@@ -171,9 +179,9 @@ public class Methods {
                     @Override
                     public void onResponse(String response) {
                         // Display the first 500 characters of the response string.
-                        result[0] = /*URLEncoder.encode(response, "EUC-KR")*/response;
-                        Toast.makeText(appContext, "Response is: "+ result[0], Toast.LENGTH_SHORT).show();
-                        System.out.println(result[0]);
+                        result[0] = /*URLEncoder.encode(response, "EUC-KR")*/ response;
+                        Toast.makeText(appContext, "Response is: "+ result[0], Toast.LENGTH_LONG).show();
+                        //System.out.println(result[0]);
                     }
                 }, new Response.ErrorListener() {
             @Override
@@ -181,7 +189,8 @@ public class Methods {
                 Toast.makeText(appContext, "That didn't work!", Toast.LENGTH_SHORT).show();
                 System.out.println("That didn't work!");
             }
-        }){
+        })
+        {
             @Override //response를 UTF8로 변경해주는 소스코드
             protected Response<String> parseNetworkResponse(NetworkResponse response) {
                 try {
@@ -231,9 +240,9 @@ public class Methods {
 //        System.out.println(responseBuilder.toString());
 
 //        return responseBuilder;
+        Log.d(TAG, "HelloWorld! "+result[0]);
         return result[0];
     }
-
 
 
     // DEV CODE
