@@ -23,6 +23,10 @@ import com.google.zxing.BarcodeFormat;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
+import org.xmlpull.v1.XmlPullParser;
+import org.xmlpull.v1.XmlPullParserException;
+import org.xmlpull.v1.XmlPullParserFactory;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -87,7 +91,7 @@ public class MainActivity extends AppCompatActivity {
         AlarmDB.printAlarmDB(appContext);
 //        Methods.printNextAlarm(appContext);
 
-        // DEV CODE
+         //DEV CODE
 //        try {
 //            String productCode = "199903739";
 //            System.out.println("Start getAPI");
@@ -97,7 +101,7 @@ public class MainActivity extends AppCompatActivity {
 //            System.out.println("Tracing getAPI");
 //            e.printStackTrace();
 //            System.out.println("Error found");
-//            Toast.makeText(appContext, "Error found", Toast.LENGTH_SHORT).show();
+//            Toast.makeText(appContext, "Error found", Toast.LENGTH_LONG).show();
 //        }
 
         // renew
@@ -188,6 +192,9 @@ public class MainActivity extends AppCompatActivity {
                 }
                 System.out.println("TTT " + response.length());
 
+                Log.d(TAG, "This is actually Printing SOMETHING:"+response);
+                //parseXml(response);
+
 //                Toast.makeText(this, result.getContents(), Toast.LENGTH_SHORT).show();
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
                 builder.setMessage("제품코드: "+productCode);
@@ -214,6 +221,37 @@ public class MainActivity extends AppCompatActivity {
         }
         else{
             super.onActivityResult(requestCode,resultCode,data);
+        }
+    }
+
+    // XML string parser: gets XML as input in string
+    public void parseXml(String xmlString){
+        try {
+
+            XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
+            factory.setNamespaceAware(true);
+            XmlPullParser xpp = factory.newPullParser();
+
+            xpp.setInput( new StringReader(xmlString) ); // pass input whatever xml you have
+            int eventType = xpp.getEventType();
+            while (eventType != XmlPullParser.END_DOCUMENT) {
+                if(eventType == XmlPullParser.START_DOCUMENT) {
+                    Log.d(TAG,"Start document");
+                } else if(eventType == XmlPullParser.START_TAG) {
+                    Log.d(TAG,"Start tag "+xpp.getName());
+                } else if(eventType == XmlPullParser.END_TAG) {
+                    Log.d(TAG,"End tag "+xpp.getName());
+                } else if(eventType == XmlPullParser.TEXT) {
+                    Log.d(TAG,"Text "+xpp.getText()); // here you get the text from xml
+                }
+                eventType = xpp.next();
+            }
+            Log.d(TAG,"End document");
+
+        } catch (XmlPullParserException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
