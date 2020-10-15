@@ -164,15 +164,15 @@ public class Methods {
         RequestQueue queue = Volley.newRequestQueue(appContext);
 
         // Request a string response from the provided URL.
-        final String[] result = new String[1];
+        final StringBuilder result = new StringBuilder();
         StringRequest stringRequest = new StringRequest(Request.Method.GET, urlBuilder.toString(),
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
                         // Display the first 500 characters of the response string.
-                        result[0] = /*URLEncoder.encode(response, "EUC-KR")*/response;
-                        Toast.makeText(appContext, "Response is: "+ result[0], Toast.LENGTH_SHORT).show();
-                        System.out.println(result[0]);
+                        result.append( /*URLEncoder.encode(response, "EUC-KR")*/ response);
+                        Toast.makeText(appContext, "Response is: "+ result.toString(), Toast.LENGTH_SHORT).show();
+                        System.out.println(result.toString());
                     }
                 }, new Response.ErrorListener() {
             @Override
@@ -229,7 +229,7 @@ public class Methods {
 //        System.out.println(responseBuilder.toString());
 
 //        return responseBuilder;
-        return result[0];
+        return result.toString();
     }
 
 

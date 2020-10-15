@@ -175,6 +175,7 @@ public class MainActivity extends AppCompatActivity {
                 String response = "";
                 try {
                     productCode = searchProdCode(codeFound);
+                    System.out.println(productCode);
                     System.out.println("Start getAPI");
                     response = Methods.getAPIResponse(getApplicationContext(), productCode);
                     System.out.println("Done getAPI");
@@ -185,6 +186,7 @@ public class MainActivity extends AppCompatActivity {
                     Toast.makeText(appContext, "Error found", Toast.LENGTH_SHORT).show();
 
                 }
+                System.out.println("TTT " + response.length());
 
 //                Toast.makeText(this, result.getContents(), Toast.LENGTH_SHORT).show();
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
