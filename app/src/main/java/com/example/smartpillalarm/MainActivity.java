@@ -365,6 +365,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void succeedAPIRequest(String productCode) {
+//        TODO:
+//        api 받아오는거 디버깅 했습니다
+//        MainActivity.succeedAPIRequest() 메소드에 request를 받은 후의 작업을 작성할 수 있습니다
+//        result는 StringBuilder변수 requestResult에 저장됩니다
+//        String res = requestResult.toString();    // 하시면 스트링으로 변환됩니다
+
         System.out.println("TTT " + requestResult.length());
 
         Log.d(TAG, "This is actually Printing SOMETHING:"+requestResult);
