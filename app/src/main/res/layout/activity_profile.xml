@@ -15,8 +15,34 @@
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.077"
+        app:layout_constraintVertical_bias="0.173"
         tools:srcCompat="@tools:sample/avatars" />
+
+    <TextView
+        android:id="@+id/tv_profile_ID"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="ID"
+        android:textSize="20dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_profile_Email"
+        app:layout_constraintVertical_bias="0.135" />
+
+    <TextView
+        android:id="@+id/tv_profile_age"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="나이"
+        android:textSize="20dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_profile_ID"
+        app:layout_constraintVertical_bias="0.186" />
 
     <TextView
         android:id="@+id/tv_profile_Email"
@@ -29,44 +55,6 @@
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/iv_profile_pic"
-        app:layout_constraintVertical_bias="0.109" />
+        app:layout_constraintVertical_bias="0.122" />
 
-    <TextView
-        android:id="@+id/tv_profile_ID"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="ID"
-        android:textSize="20dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_profile_Email"
-        app:layout_constraintVertical_bias="0.098" />
-
-    <TextView
-        android:id="@+id/tv_profile_age"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="나이"
-        android:textSize="20dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_profile_ID"
-        app:layout_constraintVertical_bias="0.114" />
-
-    <Button
-        android:id="@+id/btn_profile_update"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="72dp"
-        android:text="수정"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_profile_age"
-        app:layout_constraintVertical_bias="0.652" />
 </androidx.constraintlayout.widget.ConstraintLayout>

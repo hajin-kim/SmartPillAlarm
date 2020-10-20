@@ -28,7 +28,7 @@ public class UpdateProfile extends AppCompatActivity {
     private FirebaseAuth firebaseAuth;
     private FirebaseDatabase firebaseDatabase;
 
-    Boolean gender, pregnancy, blood_pressure, diabetes;
+    String gender, pregnancy, blood_pressure, diabetes;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,7 +72,7 @@ public class UpdateProfile extends AppCompatActivity {
                 String age = update_age.getText().toString().trim();
 
                 UserDetails userDetails = new UserDetails(Email,ID,age,gender,pregnancy,blood_pressure,diabetes);
-                databaseReference.setValue(userDetails);
+                databaseReference.child("UserDetails").setValue(userDetails);
                 finish();
                 startActivity(new Intent(UpdateProfile.this, Profile.class));
             }

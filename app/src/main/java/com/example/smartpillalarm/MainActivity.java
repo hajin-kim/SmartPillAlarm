@@ -29,6 +29,8 @@ import com.android.volley.toolbox.HttpHeaderParser;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
@@ -56,6 +58,8 @@ public class MainActivity extends AppCompatActivity {
     private Context appContext;
     private FirebaseAuth firebaseAuth;
     private StringBuilder requestResult;
+
+    String item_name, item_seq, pack_unit;  // for uploading pill data
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -214,31 +218,55 @@ public class MainActivity extends AppCompatActivity {
 
     // XML string parser: gets XML as input in string
     public void parseXml(String xmlString) throws IOException {
+        String item_seq = null, item_name = null, pack_unit = null;
+        String tag;
         try {
-
             XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
             factory.setNamespaceAware(true);
-            XmlPullParser xpp = factory.newPullParser();
+            XmlPullParser parser = factory.newPullParser();
 
-            xpp.setInput( new StringReader(xmlString) ); // pass input whatever xml you have
-            int eventType = xpp.getEventType();
+            parser.setInput( new StringReader(xmlString) ); // pass input whatever xml you have
+            int eventType = parser.getEventType();
+            int tagID = 0;
             while (eventType != XmlPullParser.END_DOCUMENT) {
-                if(eventType == XmlPullParser.START_DOCUMENT) {
-                    Log.d(TAG,"Start document");
-                } else if(eventType == XmlPullParser.START_TAG) {
-                    Log.d(TAG,"Start tag "+xpp.getName());
-                } else if(eventType == XmlPullParser.END_TAG) {
-                    Log.d(TAG,"End tag "+xpp.getName());
-                } else if(eventType == XmlPullParser.TEXT) {
-                    Log.d(TAG,"Text "+xpp.getText()); // here you get the text from xml
+                switch(eventType){
+                    case XmlPullParser.START_DOCUMENT:
+                    case XmlPullParser.END_DOCUMENT:
+                    case XmlPullParser.END_TAG:
+                        break;
+                    case XmlPullParser.START_TAG:
+                        tag = parser.getName();
+                        if(tag.equals("ITEM_SEQ")) {
+                            tagID = 1;
+                        }else if(tag.equals("ITEM_NAME")){
+                            tagID = 2;
+                        }else if(tag.equals("PACK_UNIT")){
+                            tagID = 3;
+                        }
+                        break;
+                    case XmlPullParser.TEXT:
+                        if(tagID == 1){
+                            item_seq = parser.getText().trim();
+                        }else if(tagID == 2){
+                            item_name = parser.getText().trim();
+                        }else if(tagID == 3){
+                            pack_unit = parser.getText().trim();
+                        }
+                        tagID = 0;
+                        break;
                 }
-                eventType = xpp.next();
+                eventType = parser.next();
             }
             Log.d(TAG,"End document");
 
         } catch (XmlPullParserException e) {
             e.printStackTrace();
         }
+
+        // TODO: 지금은 스캔만 하면 자동 업로드 되도록 해놨지만, 사용자가 복용할 것을 결정한 이후에 해야 함
+        // upload pill data to firebase database
+        PillData pillData = new PillData(item_seq, item_name, pack_unit);
+        sendPillData(pillData);
     }
 
     private int getRawID(String title) throws IllegalAccessException {
@@ -331,7 +359,11 @@ public class MainActivity extends AppCompatActivity {
                         requestResult.append( /*URLEncoder.encode(response, "EUC-KR")*/ response);
 //                        Toast.makeText(appContext, "Response is: "+ requestResult.toString(), Toast.LENGTH_SHORT).show();
 //                        System.out.println(requestResult.toString());
-                        succeedAPIRequest(productCode);
+                        try {
+                            succeedAPIRequest(productCode);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
                     }
                 }, new Response.ErrorListener() {
             @Override
@@ -360,11 +392,9 @@ public class MainActivity extends AppCompatActivity {
 
         // Add the request to the RequestQueue.
         queue.add(stringRequest);
-
-//        Log.d(TAG, "HelloWorld! "+requestResult.toString());
     }
 
-    public void succeedAPIRequest(String productCode) {
+    public void succeedAPIRequest(String productCode) throws IOException {
 //        TODO:
 //        api 받아오는거 디버깅 했습니다
 //        MainActivity.succeedAPIRequest() 메소드에 request를 받은 후의 작업을 작성할 수 있습니다
@@ -373,8 +403,7 @@ public class MainActivity extends AppCompatActivity {
 
         System.out.println("TTT " + requestResult.length());
 
-        Log.d(TAG, "This is actually Printing SOMETHING:"+requestResult);
-        //parseXml(response);
+        parseXml(requestResult.toString());
 
 //      Toast.makeText(this, result.getContents(), Toast.LENGTH_SHORT).show();
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -395,5 +424,12 @@ public class MainActivity extends AppCompatActivity {
         dialog.show();
 //      Toast.makeText(appContext, codeFound, Toast.LENGTH_SHORT).show();
         System.out.println("BARCODE TEST "+productCode);
+    }
+
+    private void sendPillData(PillData pillData){
+        FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
+        DatabaseReference myRef = firebaseDatabase.getReference(firebaseAuth.getUid());
+        myRef.child("PillData").child(pillData.getItem_seq()).setValue(pillData);
+        Toast.makeText(this, "약 데이터 업로드 완료", Toast.LENGTH_SHORT).show();
     }
 }
