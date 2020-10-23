@@ -29,8 +29,11 @@ import com.android.volley.toolbox.HttpHeaderParser;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
@@ -47,6 +50,7 @@ import java.io.StringReader;
 import java.lang.reflect.Field;
 import java.net.URLEncoder;
 import java.nio.charset.Charset;
+import java.util.ArrayList;
 import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
@@ -59,7 +63,8 @@ public class MainActivity extends AppCompatActivity {
     private FirebaseAuth firebaseAuth;
     private StringBuilder requestResult;
 
-    String item_name, item_seq, pack_unit;  // for uploading pill data
+    // TEST
+    private Button testButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,6 +77,8 @@ public class MainActivity extends AppCompatActivity {
         profile_button = findViewById(R.id.btn_main_profile);
         scan_button = findViewById(R.id.btn_main_scan);
         appContext = getApplicationContext();
+
+        testButton = findViewById(R.id.btn_quant_test);
 
         final Context context = this;
 
@@ -96,6 +103,17 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 scanCode();
+            }
+        });
+
+        // TODO: controlProdQuant 사용해서 알약 개수 조절하기
+        // ex) 알약 개수 두 개 차감하려면:
+        //     >> controlProdQuant(firebaseAuth, firebaseDatabase, prodCode, -2);
+        final FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
+        testButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                controlProdQuant(firebaseAuth, firebaseDatabase, "199303108", -2);
             }
         });
 
@@ -168,7 +186,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data){
         IntentResult result = IntentIntegrator.parseActivityResult(requestCode,resultCode,data);
-        String productCode = "NULL";
+        ArrayList<String> productCodeQuant;
 
         if(result != null){
             if(result.getContents() != null){
@@ -194,17 +212,14 @@ public class MainActivity extends AppCompatActivity {
                 }
 
                 try {
-                    productCode = searchProdCode(foundBarcodeDigits);
-                    System.out.println(productCode);
-                    System.out.println("Start getAPI");
-                    getAPIResponse(productCode);
-                    System.out.println("Done getAPI");
+                    productCodeQuant = searchProdCode(foundBarcodeDigits);
+                    Log.d(TAG, "prodCode:"+productCodeQuant.get(0)+"/prodQaunt"+productCodeQuant.get(1));
+                    getAPIResponse(productCodeQuant);
                 } catch (IOException | IllegalAccessException e) {
                     System.out.println("Tracing getAPI");
                     e.printStackTrace();
                     System.out.println("Error found");
                     Toast.makeText(appContext, "Error found", Toast.LENGTH_SHORT).show();
-
                 }
             }
             else{
@@ -217,8 +232,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     // XML string parser: gets XML as input in string
-    public void parseXml(String xmlString) throws IOException {
-        String item_seq = null, item_name = null, pack_unit = null;
+    public void parseXml(String xmlString, String prodQuant) throws IOException {
+        String item_seq = null, item_name = null, pack_unit = prodQuant;
         String tag;
         try {
             XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
@@ -240,8 +255,6 @@ public class MainActivity extends AppCompatActivity {
                             tagID = 1;
                         }else if(tag.equals("ITEM_NAME")){
                             tagID = 2;
-                        }else if(tag.equals("PACK_UNIT")){
-                            tagID = 3;
                         }
                         break;
                     case XmlPullParser.TEXT:
@@ -249,8 +262,6 @@ public class MainActivity extends AppCompatActivity {
                             item_seq = parser.getText().trim();
                         }else if(tagID == 2){
                             item_name = parser.getText().trim();
-                        }else if(tagID == 3){
-                            pack_unit = parser.getText().trim();
                         }
                         tagID = 0;
                         break;
@@ -280,8 +291,10 @@ public class MainActivity extends AppCompatActivity {
         return RawID;
     }
 
-    private String searchProdCode(String barcode) throws IOException, IllegalAccessException {
-        String prodCode = "NULL";  // returns corresponding product code
+    private ArrayList<String> searchProdCode(String barcode) throws IOException, IllegalAccessException {
+        ArrayList<String> prodCodeQuant = new ArrayList<>();
+        String prodCode = "NULL";  // corresponding product code
+        String prodQuant = "-1";  // corresponding product quantity: if -1, no result!
         String title = barcode.substring(3,7);
         String key = barcode.substring(7);
         int count = 0;
@@ -297,22 +310,28 @@ public class MainActivity extends AppCompatActivity {
             String[] tokens = line.split(",");
             String compCode = "880"+title+tokens[1].substring(1); // ex) 880+0500+000102
             if (compCode.equals(barcode)) {
-                prodCode = tokens[2].substring(1);  // get rid of "'" ex) '1234 => 1234
+                prodCode = tokens[2].substring(1);  // product code, get rid of "'" ex) '1234 => 1234
+                prodQuant = String.valueOf(tokens[3]); // product quantity
                 Toast.makeText(this, "Found: "+prodCode, Toast.LENGTH_SHORT).show();
-                Log.d(TAG, "Finished: "+prodCode);
+                Log.d(TAG, "Finished: "+prodCode+", Quant:"+prodQuant);
                 break;
             }
             else{
                 Log.d(TAG, "Iter: "+count+" Current: "+compCode+" Objective: "+barcode);
             }
         }
-        return prodCode;
+        prodCodeQuant.add(prodCode);
+        prodCodeQuant.add(prodQuant);
+
+        return prodCodeQuant;
     }
 
-    public void getAPIResponse(final String productCode) throws IOException {
+    public void getAPIResponse(ArrayList<String> prodCodeQuant) throws IOException {
 //        String[] serviceKey = {"r1uAyYmY3oR5pYyYwVAuUv%2FYqWVfqRmNNFWGEcsTqkABJmUp1CdLyPOWB5PLTnTQPGRduGwrjvr2Dxwp59mMYA%3D%3D", ""};
 //        String[] serviceKey = "r1uAyYmY3oR5pYyYwVAuUv%2FYqWVfqRmNNFWGEcsTqkABJmUp1CdLyPOWB5PLTnTQPGRduGwrjvr2Dxwp59mMYA%3D%3D".replace("%2F", "/").replace("%3D", "=");
         String[] serviceKey = {"r1uAyYmY3oR5pYyYwVAuUv/YqWVfqRmNNFWGEcsTqkABJmUp1CdLyPOWB5PLTnTQPGRduGwrjvr2Dxwp59mMYA==", ""};
+        final String prodCode = prodCodeQuant.get(0);
+        final String prodQuant = prodCodeQuant.get(1);
 
         // TODO: it doesn't work
         // to get API service key from firebase database
@@ -343,7 +362,7 @@ public class MainActivity extends AppCompatActivity {
         urlBuilder.append("&" + URLEncoder.encode("pageNo","UTF-8") + "=" + URLEncoder.encode("1", "UTF-8")); /*페이지 번호*/
         urlBuilder.append("&" + URLEncoder.encode("numOfRows","UTF-8") + "=" + URLEncoder.encode("3", "UTF-8")); /*한 페이지 결과 수*/
 //        urlBuilder.append("&" + URLEncoder.encode("bar_code","UTF-8") + "=" + URLEncoder.encode("8806433032005", "UTF-8")); /*표준코드*/
-        urlBuilder.append("&" + URLEncoder.encode("item_seq","UTF-8") + "=" + URLEncoder.encode(productCode, "UTF-8")); /*품목기준코드*/
+        urlBuilder.append("&" + URLEncoder.encode("item_seq","UTF-8") + "=" + URLEncoder.encode(prodCode, "UTF-8")); /*품목기준코드*/
 //        urlBuilder.append("&" + URLEncoder.encode("start_change_date","UTF-8") + "=" + URLEncoder.encode("20151216", "UTF-8")); /*변경일자시작일*/
 //        urlBuilder.append("&" + URLEncoder.encode("end_change_date","UTF-8") + "=" + URLEncoder.encode("20160101", "UTF-8")); /*변경일자종료일*/
 
@@ -360,7 +379,7 @@ public class MainActivity extends AppCompatActivity {
 //                        Toast.makeText(appContext, "Response is: "+ requestResult.toString(), Toast.LENGTH_SHORT).show();
 //                        System.out.println(requestResult.toString());
                         try {
-                            succeedAPIRequest(productCode);
+                            succeedAPIRequest(prodCode, prodQuant);
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
@@ -394,7 +413,7 @@ public class MainActivity extends AppCompatActivity {
         queue.add(stringRequest);
     }
 
-    public void succeedAPIRequest(String productCode) throws IOException {
+    public void succeedAPIRequest(String prodCode, String prodQuant) throws IOException {
 //        TODO:
 //        api 받아오는거 디버깅 했습니다
 //        MainActivity.succeedAPIRequest() 메소드에 request를 받은 후의 작업을 작성할 수 있습니다
@@ -403,11 +422,11 @@ public class MainActivity extends AppCompatActivity {
 
         System.out.println("TTT " + requestResult.length());
 
-        parseXml(requestResult.toString());
+        parseXml(requestResult.toString(), prodQuant);
 
 //      Toast.makeText(this, result.getContents(), Toast.LENGTH_SHORT).show();
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage("제품코드: "+productCode);
+        builder.setMessage("제품코드: "+prodCode);
         builder.setTitle("스캔 결과");
         builder.setPositiveButton("재시도", new DialogInterface.OnClickListener() {
             @Override
@@ -423,7 +442,7 @@ public class MainActivity extends AppCompatActivity {
         AlertDialog dialog = builder.create();
         dialog.show();
 //      Toast.makeText(appContext, codeFound, Toast.LENGTH_SHORT).show();
-        System.out.println("BARCODE TEST "+productCode);
+        System.out.println("BARCODE TEST "+prodCode);
     }
 
     private void sendPillData(PillData pillData){
@@ -432,4 +451,30 @@ public class MainActivity extends AppCompatActivity {
         myRef.child("PillData").child(pillData.getItem_seq()).setValue(pillData);
         Toast.makeText(this, "약 데이터 업로드 완료", Toast.LENGTH_SHORT).show();
     }
+
+    public void controlProdQuant(FirebaseAuth firebaseAuth, FirebaseDatabase firebaseDatabase, String prodCode, Integer prodQuant){
+        /*
+         * 제품 수량 조절하는 함수: 주로 약 복용 체크시 개수 하나씩 까는 데 사용할 것
+         * 유저의 firebaseAuth, firebaseDatabase를 제공받은 후 제품의 prodCode를 받아 수량을 조절함
+         * ex) 알약 개수 두 개 차감하려면:
+         *     >> controlProdQuant(firebaseAuth, firebaseDatabase, prodCode, -2);
+         * */
+        final Integer quantity = prodQuant;
+        final DatabaseReference myRef = firebaseDatabase.getReference(firebaseAuth.getUid());
+        final DatabaseReference myQuant = myRef.child("PillData").child(prodCode).child("pack_unit");
+
+        // onDataChange: due to asynchronous behavior, everything must be done inside it!
+        myQuant.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                Integer currentQuant = Integer.parseInt(snapshot.getValue().toString());
+                myQuant.setValue(String.valueOf(currentQuant+quantity));
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+            }
+        });
+    }
+
 }
