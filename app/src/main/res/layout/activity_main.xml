@@ -9,69 +9,69 @@
 
     <!--    devjhp, merge on Sep. 13.-->
 <!--    bfr:         app:layout_constraintVertical_bias="0.647" />-->
-<!--    aft:         app:layout_constraintVertical_bias="0.566" />-->
-    <Button
-        android:id="@+id/button_start"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="17dp"
-        android:text="@string/button_text_start"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.566" />
+<!--&lt;!&ndash;    aft:         app:layout_constraintVertical_bias="0.566" />&ndash;&gt;-->
+<!--    <Button-->
+<!--        android:id="@+id/button_start"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginTop="17dp"-->
+<!--        android:text="@string/button_text_start"-->
+<!--        app:layout_constraintBottom_toBottomOf="parent"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintHorizontal_bias="0.498"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toTopOf="parent"-->
+<!--        app:layout_constraintVertical_bias="0.566" />-->
 
-    <Button
-        android:id="@+id/btn_main_logout"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="636dp"
-        android:text="@string/btn_main_logout"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+<!--    <Button-->
+<!--        android:id="@+id/btn_main_logout"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginTop="636dp"-->
+<!--        android:text="@string/btn_main_logout"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintHorizontal_bias="0.498"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toTopOf="parent" />-->
 
-    <!--    devjhp, merge on Sep. 13.-->
-    <!--    bfr:         app:layout_constraintVertical_bias="0.245" />-->
-    <!--    aft:         app:layout_constraintVertical_bias="0.294" />-->
-    <Button
-        android:id="@+id/btn_main_profile"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="프로필"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button_start"
-        app:layout_constraintVertical_bias="0.294" />
+<!--    &lt;!&ndash;    devjhp, merge on Sep. 13.&ndash;&gt;-->
+<!--    &lt;!&ndash;    bfr:         app:layout_constraintVertical_bias="0.245" />&ndash;&gt;-->
+<!--    &lt;!&ndash;    aft:         app:layout_constraintVertical_bias="0.294" />&ndash;&gt;-->
+<!--    <Button-->
+<!--        android:id="@+id/btn_main_profile"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:text="프로필"-->
+<!--        app:layout_constraintBottom_toBottomOf="parent"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintHorizontal_bias="0.498"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/button_start"-->
+<!--        app:layout_constraintVertical_bias="0.294" />-->
 
-    <!--    devjhp, merge on Sep. 13.-->
-    <!--    add:         app:layout_constraintVertical_bias="0.393" />-->
-    <Button
-        android:id="@+id/btn_main_scan"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="스캔"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.393" />
+<!--    &lt;!&ndash;    devjhp, merge on Sep. 13.&ndash;&gt;-->
+<!--    &lt;!&ndash;    add:         app:layout_constraintVertical_bias="0.393" />&ndash;&gt;-->
+<!--    <Button-->
+<!--        android:id="@+id/btn_main_scan"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:text="스캔"-->
+<!--        app:layout_constraintBottom_toBottomOf="parent"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toTopOf="parent"-->
+<!--        app:layout_constraintVertical_bias="0.393" />-->
 
-    <Button
-        android:id="@+id/btn_quant_test"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="알약개수차감(TEST)"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.153" />
+<!--    <Button-->
+<!--        android:id="@+id/btn_quant_test"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:text="알약개수차감(TEST)"-->
+<!--        app:layout_constraintBottom_toBottomOf="parent"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintHorizontal_bias="0.498"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toTopOf="parent"-->
+<!--        app:layout_constraintVertical_bias="0.153" />-->
 
 </androidx.constraintlayout.widget.ConstraintLayout>
