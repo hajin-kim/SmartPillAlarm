@@ -85,12 +85,9 @@ public class MainActivity extends AppCompatActivity {
 //        NavigationUI.setupWithNavController(navView, navController);
 
         logout_button = findViewById(R.id.btn_main_logout);
-        profile_button = findViewById(R.id.btn_main_profile);
-        scan_button = findViewById(R.id.btn_main_scan);
+        scan_button = findViewById(R.id.btnAdd);
         appContext = getApplicationContext();
         thisContext = this;
-
-        testButton = findViewById(R.id.btn_quant_test);
 
 
         firebaseAuth = FirebaseAuth.getInstance();    // for login-logout via Firebase
@@ -99,14 +96,6 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 logout();
-            }
-        });
-
-        profile_button.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View view){
-                //finish();
-                startActivity(new Intent(MainActivity.this, Profile.class));
             }
         });
 
@@ -120,13 +109,13 @@ public class MainActivity extends AppCompatActivity {
         // TODO: controlProdQuant 사용해서 알약 개수 조절하기
         // ex) 알약 개수 두 개 차감하려면:
         //     >> controlProdQuant(firebaseAuth, firebaseDatabase, prodCode, -2);
-        final FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
-        testButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                controlProdQuant(firebaseAuth, firebaseDatabase, "199303108", -2);
-            }
-        });
+//        final FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
+//        testButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                controlProdQuant(firebaseAuth, firebaseDatabase, "199303108", -2);
+//            }
+//        });
 
         // DEV CODE
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
@@ -245,6 +234,7 @@ public class MainActivity extends AppCompatActivity {
     // XML string parser: gets XML as input in string
     public void parseXml(String xmlString, String prodQuant) throws IOException {
         String item_seq = null, item_name = null, pack_unit = prodQuant;
+        ArrayList<String> efficacy = new ArrayList<String>();
         String tag;
         try {
             XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
@@ -254,6 +244,7 @@ public class MainActivity extends AppCompatActivity {
             parser.setInput( new StringReader(xmlString) ); // pass input whatever xml you have
             int eventType = parser.getEventType();
             int tagID = 0;
+            Boolean EE_flag = false;
             while (eventType != XmlPullParser.END_DOCUMENT) {
                 switch(eventType){
                     case XmlPullParser.START_DOCUMENT:
@@ -262,17 +253,27 @@ public class MainActivity extends AppCompatActivity {
                         break;
                     case XmlPullParser.START_TAG:
                         tag = parser.getName();
+                        Log.d(TAG, "TAGS://"+tag);
                         if(tag.equals("ITEM_SEQ")) {
                             tagID = 1;
                         }else if(tag.equals("ITEM_NAME")){
                             tagID = 2;
+                        }else if(tag.equals("EE_DOC_DATA")){
+                            EE_flag = true;
+                        }else if(tag.equals("UD_DOC_DATA")){
+                            EE_flag = false;
+                        }else if(tag.equals("PARAGRAPH") && EE_flag == true){
+                            tagID = 3;
                         }
+
                         break;
                     case XmlPullParser.TEXT:
                         if(tagID == 1){
                             item_seq = parser.getText().trim();
                         }else if(tagID == 2){
                             item_name = parser.getText().trim();
+                        }else if(tagID == 3){
+                            efficacy.add(parser.getText().trim());
                         }
                         tagID = 0;
                         break;
@@ -287,7 +288,7 @@ public class MainActivity extends AppCompatActivity {
 
         // TODO: 지금은 스캔만 하면 자동 업로드 되도록 해놨지만, 사용자가 복용할 것을 결정한 이후에 해야 함
         // upload pill data to firebase database
-        PillData pillData = new PillData(item_seq, item_name, pack_unit);
+        PillData pillData = new PillData(item_seq, item_name, pack_unit, efficacy);
         sendPillData(pillData);
     }
 
