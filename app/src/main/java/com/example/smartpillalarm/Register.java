@@ -36,8 +36,7 @@ public class Register extends AppCompatActivity {
     private CheckBox checkbox_blood_pressure;
     private Context appContext;
 
-    String id, pw, email, age;
-    boolean gender = true, pregnancy = false, blood_pressure = false, diabetes = false;
+    String id, pw, email, age, gender, pregnancy, blood_pressure, diabetes;
 
     private void setup_UI_Views(){
         register_ID = (EditText)findViewById(R.id.et_register_ID);
@@ -53,6 +52,7 @@ public class Register extends AppCompatActivity {
         checkbox_diabetes = (CheckBox)findViewById(R.id.checkbox_register_diabetes);
         checkbox_pregnancy = (CheckBox)findViewById(R.id.checkbox_register_pregnancy);
         checkbox_pregnancy.setEnabled(false);
+        appContext = getApplicationContext();
     }
 
     @Override
@@ -67,11 +67,11 @@ public class Register extends AppCompatActivity {
         checkbox_pregnancy.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view){
-                if(checkbox_pregnancy.isChecked() && gender == false){
-                    pregnancy = true;
+                if(checkbox_pregnancy.isChecked() && gender == "female"){
+                    pregnancy = "true";
                 }
                 else{
-                    pregnancy = false;
+                    pregnancy = "false";
                 }
             }
         });
@@ -80,10 +80,10 @@ public class Register extends AppCompatActivity {
             @Override
             public void onClick(View view){
                 if(checkbox_blood_pressure.isChecked()){
-                    blood_pressure = true;
+                    blood_pressure = "true";
                 }
                 else{
-                    blood_pressure = false;
+                    blood_pressure = "false";
                 }
             }
         });
@@ -92,10 +92,10 @@ public class Register extends AppCompatActivity {
             @Override
             public void onClick(View view){
                 if(checkbox_diabetes.isChecked()){
-                    diabetes = true;
+                    diabetes = "true";
                 }
                 else{
-                    diabetes = false;
+                    diabetes = "false";
                 }
             }
         });
@@ -140,7 +140,7 @@ public class Register extends AppCompatActivity {
         FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
         DatabaseReference myRef = firebaseDatabase.getReference(firebaseAuth.getUid());
         UserDetails userDetails = new UserDetails(email, id,age,gender,pregnancy,blood_pressure,diabetes);
-        myRef.setValue(userDetails);
+        myRef.child("UserDetails").setValue(userDetails);
         Toast.makeText(this, "데이터베이스 업로드 완료", Toast.LENGTH_SHORT).show();
     }
 
@@ -151,8 +151,8 @@ public class Register extends AppCompatActivity {
         switch(view.getId()) {
             case R.id.rbutton_register_male:
                 if (checked)
-                    gender = true;
-                    pregnancy = false;
+                    gender = "male";
+                    pregnancy = "false";
                     if(checkbox_pregnancy.isChecked()){
                         checkbox_pregnancy.toggle();
                     }
@@ -160,7 +160,7 @@ public class Register extends AppCompatActivity {
                     break;
             case R.id.rbutton_register_female:
                 if (checked)
-                    gender = false;
+                    gender = "female";
                     checkbox_pregnancy.setEnabled(true);
                     break;
         }

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.example.smartpillalarm">
 
     <uses-permission android:name="android.permission.CAMERA" />
@@ -8,14 +9,19 @@
     <uses-feature android:name="android.hardware.camera.autofocus" />
 
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/title_app_name"
+        android:networkSecurityConfig="@xml/network_security_config"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme.NoActionBar">
+        android:theme="@style/AppTheme.NoActionBar"
+        tools:targetApi="n">
+        <activity android:name=".AlarmActivity"></activity>
+        <!-- open API request hotfix. TODO: resolve this min constraint -->
         <!-- devjhp, merge on Sep. 13. -->
         <activity
             android:name=".ActivityBottomMenu"
@@ -38,7 +44,7 @@
             android:name=".CaptureAct"
             android:screenOrientation="fullSensor"
             android:stateNotNeeded="true"
-            android:windowSoftInputMode="stateAlwaysHidden"></activity>
+            android:windowSoftInputMode="stateAlwaysHidden" />
 
         <receiver android:name=".AlarmReceiver" />
         <receiver

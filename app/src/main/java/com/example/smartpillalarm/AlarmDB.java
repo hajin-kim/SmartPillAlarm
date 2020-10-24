@@ -41,6 +41,7 @@ public class AlarmDB implements DB {
                     "KEY_ALARM19_TIME",
                     "KEY_ALARM20_TIME"
             };
+
     public final static String ALARM_ACTIVATED[] =
             {
                     "KEY_ALARM1_ACTIVATED",
@@ -64,6 +65,7 @@ public class AlarmDB implements DB {
                     "KEY_ALARM19_ACTIVATED",
                     "KEY_ALARM20_ACTIVATED"
             };
+
     public final static String ALARM_CONTENTS[] =
             {
                     "KEY_ALARM1_CONTENTS",
@@ -88,6 +90,79 @@ public class AlarmDB implements DB {
                     "KEY_ALARM20_CONTENTS"
             };
 
+    public final static String ALARM_DRUG_NAMES[] =
+            {
+                    "KEY_ALARM1_DRUG_NAMES",
+                    "KEY_ALARM2_DRUG_NAMES",
+                    "KEY_ALARM3_DRUG_NAMES",
+                    "KEY_ALARM4_DRUG_NAMES",
+                    "KEY_ALARM5_DRUG_NAMES",
+                    "KEY_ALARM6_DRUG_NAMES",
+                    "KEY_ALARM7_DRUG_NAMES",
+                    "KEY_ALARM8_DRUG_NAMES",
+                    "KEY_ALARM9_DRUG_NAMES",
+                    "KEY_ALARM10_DRUG_NAMES",
+                    "KEY_ALARM11_DRUG_NAMES",
+                    "KEY_ALARM12_DRUG_NAMES",
+                    "KEY_ALARM13_DRUG_NAMES",
+                    "KEY_ALARM14_DRUG_NAMES",
+                    "KEY_ALARM15_DRUG_NAMES",
+                    "KEY_ALARM16_DRUG_NAMES",
+                    "KEY_ALARM17_DRUG_NAMES",
+                    "KEY_ALARM18_DRUG_NAMES",
+                    "KEY_ALARM19_DRUG_NAMES",
+                    "KEY_ALARM20_DRUG_NAMES"
+            };
+
+    public final static String ALARM_DRUG_PROD_CODES[] =
+            {
+                    "KEY_ALARM1_DRUG_PROD_CODES",
+                    "KEY_ALARM2_DRUG_PROD_CODES",
+                    "KEY_ALARM3_DRUG_PROD_CODES",
+                    "KEY_ALARM4_DRUG_PROD_CODES",
+                    "KEY_ALARM5_DRUG_PROD_CODES",
+                    "KEY_ALARM6_DRUG_PROD_CODES",
+                    "KEY_ALARM7_DRUG_PROD_CODES",
+                    "KEY_ALARM8_DRUG_PROD_CODES",
+                    "KEY_ALARM9_DRUG_PROD_CODES",
+                    "KEY_ALARM10_DRUG_PROD_CODES",
+                    "KEY_ALARM11_DRUG_PROD_CODES",
+                    "KEY_ALARM12_DRUG_PROD_CODES",
+                    "KEY_ALARM13_DRUG_PROD_CODES",
+                    "KEY_ALARM14_DRUG_PROD_CODES",
+                    "KEY_ALARM15_DRUG_PROD_CODES",
+                    "KEY_ALARM16_DRUG_PROD_CODES",
+                    "KEY_ALARM17_DRUG_PROD_CODES",
+                    "KEY_ALARM18_DRUG_PROD_CODES",
+                    "KEY_ALARM19_DRUG_PROD_CODES",
+                    "KEY_ALARM20_DRUG_PROD_CODES"
+            };
+
+    public final static String ALARM_NUM_DRUG[] =
+            {
+                    "KEY_ALARM1_NUM_DRUG",
+                    "KEY_ALARM2_NUM_DRUG",
+                    "KEY_ALARM3_NUM_DRUG",
+                    "KEY_ALARM4_NUM_DRUG",
+                    "KEY_ALARM5_NUM_DRUG",
+                    "KEY_ALARM6_NUM_DRUG",
+                    "KEY_ALARM7_NUM_DRUG",
+                    "KEY_ALARM8_NUM_DRUG",
+                    "KEY_ALARM9_NUM_DRUG",
+                    "KEY_ALARM10_NUM_DRUG",
+                    "KEY_ALARM11_NUM_DRUG",
+                    "KEY_ALARM12_NUM_DRUG",
+                    "KEY_ALARM13_NUM_DRUG",
+                    "KEY_ALARM14_NUM_DRUG",
+                    "KEY_ALARM15_NUM_DRUG",
+                    "KEY_ALARM16_NUM_DRUG",
+                    "KEY_ALARM17_NUM_DRUG",
+                    "KEY_ALARM18_NUM_DRUG",
+                    "KEY_ALARM19_NUM_DRUG",
+                    "KEY_ALARM20_NUM_DRUG"
+            };
+
+
 
     private int num_of_alarm;
     private Alarm[] array_alarm;
@@ -102,7 +177,6 @@ public class AlarmDB implements DB {
         this.array_alarm = new Alarm[AlarmDB.MAX_ALARM];
         this.sharedPreferences = context.getSharedPreferences(AlarmDB.DB_NAME, MODE_PRIVATE);
     }
-
 
     // throws exception when the preference has a fault
     public static AlarmDB getInstance(Context context) {
@@ -138,13 +212,19 @@ public class AlarmDB implements DB {
             long alarm_time = sharedPreferences.getLong(AlarmDB.ALARM_TIME[i], 0L);
             String alarm_contents = sharedPreferences.getString(AlarmDB.ALARM_CONTENTS[i], null);
             boolean alarm_activated = sharedPreferences.getBoolean(AlarmDB.ALARM_ACTIVATED[i], false);
+            String alarm_drug_name = sharedPreferences.getString(AlarmDB.ALARM_DRUG_NAMES[i], null);
+            String alarm_drug_product_code = sharedPreferences.getString(AlarmDB.ALARM_DRUG_PROD_CODES[i], null);
+            int alarm_num_drug = sharedPreferences.getInt(AlarmDB.ALARM_NUM_DRUG[i], 0);
 
             if (alarm_time == 0L || alarm_contents == null) throw new Exception("stub!");
 
             this.array_alarm[i] = new Alarm(
                     alarm_time,
                     alarm_contents,
-                    alarm_activated
+                    alarm_activated,
+                    alarm_drug_name,
+                    alarm_drug_product_code,
+                    alarm_num_drug
             );
         }
     }
@@ -162,6 +242,12 @@ public class AlarmDB implements DB {
                     alarm.getContents());
             editor.putBoolean(AlarmDB.ALARM_ACTIVATED[i],
                     alarm.isActivated());
+            editor.putString(AlarmDB.ALARM_DRUG_NAMES[i],
+                    alarm.getDrugName());
+            editor.putString(AlarmDB.ALARM_DRUG_PROD_CODES[i],
+                    alarm.getDrugProdCode());
+            editor.putInt(AlarmDB.ALARM_NUM_DRUG[i],
+                    alarm.getNum_drug());
         }
         editor.apply();
     }
@@ -183,6 +269,17 @@ public class AlarmDB implements DB {
     public boolean insertAlarm(Calendar calendar, String contents, boolean activated) {
         return this.insertAlarm(calendar.getTimeInMillis(), contents, activated);
     }
+
+    // insert with whole alarm data
+    public boolean insertAlarm(long time, String contents, boolean activated, String drugName, String drugProdCode, int num_drug) {
+        return this.insertAlarm(new Alarm(time, contents, activated, drugName, drugProdCode, num_drug));
+    }
+
+    public boolean insertAlarm(Calendar calendar, String contents, boolean activated, String drugName, String drugProdCode, int num_drug) {
+        return this.insertAlarm(calendar.getTimeInMillis(), contents, activated, drugName, drugProdCode, num_drug);
+    }
+
+
 
 
     public boolean deleteAlarm(int index) {

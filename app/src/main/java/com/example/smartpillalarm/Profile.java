@@ -35,7 +35,7 @@ public class Profile extends AppCompatActivity {
         profile_Email = findViewById(R.id.tv_profile_Email);
         profile_ID = findViewById(R.id.tv_profile_ID);
         profile_age = findViewById(R.id.tv_profile_age);
-        profile_update = findViewById(R.id.btn_profile_update);
+//        profile_update = findViewById(R.id.btn_profile_update);
 
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseDatabase = FirebaseDatabase.getInstance();
@@ -44,7 +44,7 @@ public class Profile extends AppCompatActivity {
         databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                UserDetails userDetails = snapshot.getValue(UserDetails.class);
+                UserDetails userDetails = snapshot.child("UserDetails").getValue(UserDetails.class);
                 profile_Email.setText("Email: "+userDetails.getE_mail());
                 profile_ID.setText("ID: "+userDetails.getId());
                 profile_age.setText("나이: "+userDetails.getAge());
@@ -56,12 +56,14 @@ public class Profile extends AppCompatActivity {
             }
         });
 
-        profile_update.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-//                finish();
-                startActivity(new Intent(Profile.this, UpdateProfile.class));
-            }
-        });
+        //TODO: 프로필 업데이트 시 모든 필드 값 초기화되는 문제
+// Temporarily blocked due to error
+//        profile_update.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+////                finish();
+//                startActivity(new Intent(Profile.this, UpdateProfile.class));
+//            }
+//        });
     }
 }

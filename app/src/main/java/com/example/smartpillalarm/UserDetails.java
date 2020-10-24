@@ -4,14 +4,14 @@ public class UserDetails {
     public String e_mail;
     public String age;
     public String id;
-    public Boolean gender;
-    public Boolean pregnancy;
-    public Boolean blood_pressure;
-    public Boolean diabetes;
+    public String gender;
+    public String pregnancy;
+    public String blood_pressure;
+    public String diabetes;
 
-    public UserDetails(){}
+    public UserDetails(){}  // No argument constructor
 
-    public UserDetails(String e_mail, String id, String age, Boolean gender, Boolean pregnancy, Boolean blood_pressure, Boolean diabetes) {
+    public UserDetails(String e_mail, String id, String age, String gender, String pregnancy, String blood_pressure, String diabetes) {
         this.e_mail = e_mail;
         this.id = id;
         this.age = age;
@@ -45,35 +45,35 @@ public class UserDetails {
         this.id = id;
     }
 
-    public Boolean getGender() {
+    public String getGender() {
         return gender;
     }
 
-    public void setGender(Boolean gender) {
+    public void setGender(String gender) {
         this.gender = gender;
     }
 
-    public Boolean getPregnancy() {
+    public String getPregnancy() {
         return pregnancy;
     }
 
-    public void setPregnancy(Boolean pregnancy) {
+    public void setPregnancy(String pregnancy) {
         this.pregnancy = pregnancy;
     }
 
-    public Boolean getBlood_pressure() {
+    public String getBlood_pressure() {
         return blood_pressure;
     }
 
-    public void setBlood_pressure(Boolean blood_pressure) {
+    public void setBlood_pressure(String blood_pressure) {
         this.blood_pressure = blood_pressure;
     }
 
-    public Boolean getDiabetes() {
+    public String getDiabetes() {
         return diabetes;
     }
 
-    public void setDiabetes(Boolean diabetes) {
+    public void setDiabetes(String diabetes) {
         this.diabetes = diabetes;
     }
 }
