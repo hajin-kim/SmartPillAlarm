@@ -3,6 +3,7 @@ package com.example.smartpillalarm;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
@@ -114,6 +115,9 @@ public class AlarmGeneratorActivity extends AppCompatActivity {
 
                 // reserve notification
                 Methods.reserveNotification(appContext);
+
+                finish();
+                startActivity(new Intent(AlarmGeneratorActivity.this, MainActivity.class));
             }
         });
     }

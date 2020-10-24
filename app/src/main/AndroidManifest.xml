@@ -37,8 +37,8 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".MainActivity"
-            android:theme="@style/SplashTheme" />
+            android:name=".MainActivity"/>
+<!--            android:theme="@style/SplashTheme" />-->
         <activity android:name=".AlarmGeneratorActivity" />
         <activity
             android:name=".CaptureAct"

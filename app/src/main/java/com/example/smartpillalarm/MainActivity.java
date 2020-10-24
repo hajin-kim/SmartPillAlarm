@@ -439,31 +439,30 @@ public class MainActivity extends AppCompatActivity {
         parseXml(requestResult.toString(), prodQuant);
 
 //      Toast.makeText(this, result.getContents(), Toast.LENGTH_SHORT).show();
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage("제품코드: "+prodCode);
-        builder.setTitle("스캔 결과");
-        builder.setPositiveButton("재시도", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                scanCode();
-            }
-        }).setNegativeButton("완료", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                //finish();
-            }
-        });
-        AlertDialog dialog = builder.create();
-        dialog.show();
-//      Toast.makeText(appContext, codeFound, Toast.LENGTH_SHORT).show();
-        System.out.println("BARCODE TEST "+prodCode);
+//        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+//        builder.setMessage("제품코드: "+prodCode);
+//        builder.setTitle("스캔 결과");
+//        builder.setPositiveButton("재시도", new DialogInterface.OnClickListener() {
+//            @Override
+//            public void onClick(DialogInterface dialogInterface, int i) {
+//                scanCode();
+//            }
+//        }).setNegativeButton("완료", new DialogInterface.OnClickListener() {
+//            @Override
+//            public void onClick(DialogInterface dialogInterface, int i) {
+//                //finish();
+//            }
+//        });
+//        AlertDialog dialog = builder.create();
+//        dialog.show();
+
 
         // start ScanResultActivity
         Intent scanResultIntent = new Intent(thisContext, ScanResultActivity.class);
         scanResultIntent.putExtra(getString(R.string.extra_key_prodCode), prodCode);
-        scanResultIntent.putExtra(getString(R.string.extra_key_drugName), "이름");
-        scanResultIntent.putExtra(getString(R.string.extra_key_drugInfo), "내용"); // TODO: 여기에 전달할 효능효과 등의 내용을 넣어주세요.
-        scanResultIntent.putExtra(getString(R.string.extra_key_numDrug), 5);
+//        scanResultIntent.putExtra(getString(R.string.extra_key_drugName), "이름");
+//        scanResultIntent.putExtra(getString(R.string.extra_key_drugInfo), "내용"); // TODO: 여기에 전달할 효능효과 등의 내용을 넣어주세요.
+//        scanResultIntent.putExtra(getString(R.string.extra_key_numDrug), 5);
         startActivity(scanResultIntent);
     }
 
@@ -491,6 +490,7 @@ public class MainActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 Integer currentQuant = Integer.parseInt(snapshot.getValue().toString());
                 myQuant.setValue(String.valueOf(currentQuant+quantity));
+
             }
 
             @Override
