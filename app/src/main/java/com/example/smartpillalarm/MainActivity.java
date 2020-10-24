@@ -9,10 +9,6 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
-import androidx.navigation.ui.AppBarConfiguration;
-import androidx.navigation.ui.NavigationUI;
 //import androidx.appcompat.widget.Toolbar;
 
 import android.util.Log;
@@ -32,7 +28,6 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.HttpHeaderParser;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -459,6 +454,14 @@ public class MainActivity extends AppCompatActivity {
         dialog.show();
 //      Toast.makeText(appContext, codeFound, Toast.LENGTH_SHORT).show();
         System.out.println("BARCODE TEST "+prodCode);
+
+        // start ScanResultActivity
+        Intent scanResultIntent = new Intent(thisContext, ScanResultActivity.class);
+        scanResultIntent.putExtra(getString(R.string.extra_key_prodCode), prodCode);
+        scanResultIntent.putExtra(getString(R.string.extra_key_drugName), "이름");
+        scanResultIntent.putExtra(getString(R.string.extra_key_drugInfo), "내용"); // TODO: 여기에 전달할 효능효과 등의 내용을 넣어주세요.
+        scanResultIntent.putExtra(getString(R.string.extra_key_numDrug), 5);
+        startActivity(scanResultIntent);
     }
 
     private void sendPillData(PillData pillData){

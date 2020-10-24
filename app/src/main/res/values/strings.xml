@@ -63,6 +63,11 @@
     <string name="alarm_activity_button_took_pill">복약함</string>
     <string name="alarm_activity_button_didnot_take_pill">복약하지 않음</string>
     <string name="alarm_activity_button_shutdown">강제종료</string>
+
+    <string name="extra_key_drugName">KEY_drugName</string>
+    <string name="extra_key_prodCode">KEY_prodCode</string>
+    <string name="extra_key_drugInfo">KEY_contents</string>
+    <string name="extra_key_numDrug">KEY_numDrug</string>
     <!--    done-->
 
 </resources>
