@@ -377,6 +377,8 @@ public class MainActivity extends AppCompatActivity {
 //        urlBuilder.append("&" + URLEncoder.encode("start_change_date","UTF-8") + "=" + URLEncoder.encode("20151216", "UTF-8")); /*변경일자시작일*/
 //        urlBuilder.append("&" + URLEncoder.encode("end_change_date","UTF-8") + "=" + URLEncoder.encode("20160101", "UTF-8")); /*변경일자종료일*/
 
+        System.out.println(urlBuilder.toString());
+
         // Instantiate the RequestQueue.
         RequestQueue queue = Volley.newRequestQueue(appContext);
 

@@ -49,6 +49,7 @@ public class ScanResultActivity extends AppCompatActivity {
                 alarmGeneratorIntent.putExtra(getString(R.string.extra_key_drugName), drugName);
                 alarmGeneratorIntent.putExtra(getString(R.string.extra_key_drugInfo), drugInfo); // TODO: 여기에 전달할 효능효과 등의 내용을 넣어주세요.
                 alarmGeneratorIntent.putExtra(getString(R.string.extra_key_numDrug), numDrug);
+                startActivity(alarmGeneratorIntent);
             }
         });
 
