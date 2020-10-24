@@ -15,14 +15,13 @@
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/title_app_name"
+        android:networkSecurityConfig="@xml/network_security_config"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar"
-        android:networkSecurityConfig="@xml/network_security_config"
-        tools:targetApi="n" >
-    <!-- open API request hotfix. TODO: resolve this min constraint -->
-
-
+        tools:targetApi="n">
+        <activity android:name=".AlarmActivity"></activity>
+        <!-- open API request hotfix. TODO: resolve this min constraint -->
         <!-- devjhp, merge on Sep. 13. -->
         <activity
             android:name=".ActivityBottomMenu"

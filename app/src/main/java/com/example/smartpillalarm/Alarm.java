@@ -8,22 +8,25 @@ public class Alarm implements Comparable<Alarm> {
     private boolean activated;
     private String drugName;
     private String drugProdCode;
+    private int num_drug;
 
 
     public Alarm(long time, String contents, boolean activated) {
         this.time = time;
         this.contents = contents;
         this.activated = activated;
-        drugName = null;
-        drugProdCode = null;
+        this.drugName = null;
+        this.drugProdCode = null;
+        this.num_drug = Integer.MAX_VALUE;
     }
 
-    public Alarm(long time, String contents, boolean activated, String drugName, String drugProdCode) {
+    public Alarm(long time, String contents, boolean activated, String drugName, String drugProdCode, int num_drug) {
         this.time = time;
         this.contents = contents;
         this.activated = activated;
         this.drugName = drugName;
         this.drugProdCode = drugProdCode;
+        this.num_drug = num_drug;
     }
 
     @Override
@@ -50,6 +53,16 @@ public class Alarm implements Comparable<Alarm> {
 
     public String getDrugProdCode() {
         return drugProdCode;
+    }
+
+    public int getNum_drug() {
+        return num_drug;
+    }
+
+    public boolean decreaseNum_drug() {
+        if (num_drug <= 0) return false;
+        --num_drug;
+        return true;
     }
 
     public void updateAlarmDate(Calendar current_calendar) {

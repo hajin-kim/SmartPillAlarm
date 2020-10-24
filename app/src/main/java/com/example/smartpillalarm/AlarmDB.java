@@ -138,6 +138,30 @@ public class AlarmDB implements DB {
                     "KEY_ALARM20_DRUG_PROD_CODES"
             };
 
+    public final static String ALARM_NUM_DRUG[] =
+            {
+                    "KEY_ALARM1_NUM_DRUG",
+                    "KEY_ALARM2_NUM_DRUG",
+                    "KEY_ALARM3_NUM_DRUG",
+                    "KEY_ALARM4_NUM_DRUG",
+                    "KEY_ALARM5_NUM_DRUG",
+                    "KEY_ALARM6_NUM_DRUG",
+                    "KEY_ALARM7_NUM_DRUG",
+                    "KEY_ALARM8_NUM_DRUG",
+                    "KEY_ALARM9_NUM_DRUG",
+                    "KEY_ALARM10_NUM_DRUG",
+                    "KEY_ALARM11_NUM_DRUG",
+                    "KEY_ALARM12_NUM_DRUG",
+                    "KEY_ALARM13_NUM_DRUG",
+                    "KEY_ALARM14_NUM_DRUG",
+                    "KEY_ALARM15_NUM_DRUG",
+                    "KEY_ALARM16_NUM_DRUG",
+                    "KEY_ALARM17_NUM_DRUG",
+                    "KEY_ALARM18_NUM_DRUG",
+                    "KEY_ALARM19_NUM_DRUG",
+                    "KEY_ALARM20_NUM_DRUG"
+            };
+
 
 
     private int num_of_alarm;
@@ -153,7 +177,6 @@ public class AlarmDB implements DB {
         this.array_alarm = new Alarm[AlarmDB.MAX_ALARM];
         this.sharedPreferences = context.getSharedPreferences(AlarmDB.DB_NAME, MODE_PRIVATE);
     }
-
 
     // throws exception when the preference has a fault
     public static AlarmDB getInstance(Context context) {
@@ -189,13 +212,19 @@ public class AlarmDB implements DB {
             long alarm_time = sharedPreferences.getLong(AlarmDB.ALARM_TIME[i], 0L);
             String alarm_contents = sharedPreferences.getString(AlarmDB.ALARM_CONTENTS[i], null);
             boolean alarm_activated = sharedPreferences.getBoolean(AlarmDB.ALARM_ACTIVATED[i], false);
+            String alarm_drug_name = sharedPreferences.getString(AlarmDB.ALARM_DRUG_NAMES[i], null);
+            String alarm_drug_product_code = sharedPreferences.getString(AlarmDB.ALARM_DRUG_PROD_CODES[i], null);
+            int alarm_num_drug = sharedPreferences.getInt(AlarmDB.ALARM_NUM_DRUG[i], 0);
 
             if (alarm_time == 0L || alarm_contents == null) throw new Exception("stub!");
 
             this.array_alarm[i] = new Alarm(
                     alarm_time,
                     alarm_contents,
-                    alarm_activated
+                    alarm_activated,
+                    alarm_drug_name,
+                    alarm_drug_product_code,
+                    alarm_num_drug
             );
         }
     }
@@ -213,6 +242,12 @@ public class AlarmDB implements DB {
                     alarm.getContents());
             editor.putBoolean(AlarmDB.ALARM_ACTIVATED[i],
                     alarm.isActivated());
+            editor.putString(AlarmDB.ALARM_DRUG_NAMES[i],
+                    alarm.getDrugName());
+            editor.putString(AlarmDB.ALARM_DRUG_PROD_CODES[i],
+                    alarm.getDrugProdCode());
+            editor.putInt(AlarmDB.ALARM_NUM_DRUG[i],
+                    alarm.getNum_drug());
         }
         editor.apply();
     }
@@ -235,12 +270,13 @@ public class AlarmDB implements DB {
         return this.insertAlarm(calendar.getTimeInMillis(), contents, activated);
     }
 
-    public boolean insertAlarm(long time, String contents, boolean activated, String drugName, String drugProdCode) {
-        return this.insertAlarm(new Alarm(time, contents, activated, drugName, drugProdCode));
+    // insert with whole alarm data
+    public boolean insertAlarm(long time, String contents, boolean activated, String drugName, String drugProdCode, int num_drug) {
+        return this.insertAlarm(new Alarm(time, contents, activated, drugName, drugProdCode, num_drug));
     }
 
-    public boolean insertAlarm(Calendar calendar, String contents, boolean activated, String drugName, String drugProdCode) {
-        return this.insertAlarm(calendar.getTimeInMillis(), contents, activated, drugName, drugProdCode);
+    public boolean insertAlarm(Calendar calendar, String contents, boolean activated, String drugName, String drugProdCode, int num_drug) {
+        return this.insertAlarm(calendar.getTimeInMillis(), contents, activated, drugName, drugProdCode, num_drug);
     }
 
 

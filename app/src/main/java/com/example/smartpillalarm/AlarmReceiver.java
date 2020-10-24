@@ -23,10 +23,9 @@ public class AlarmReceiver extends BroadcastReceiver {
 
 
         NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-        Intent notificationIntent = new Intent(context, AlarmGeneratorActivity.class);
+        Intent notificationIntent = new Intent(context, AlarmActivity.class);
 
         notificationIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-
         PendingIntent pendingI = PendingIntent.getActivity(context, 0, notificationIntent, 0);
 
         // make a notification builder
@@ -62,11 +61,17 @@ public class AlarmReceiver extends BroadcastReceiver {
                 .setContentTitle(alarm_auto_channel_content_title)
                 .setContentText(alarm_auto_channel_content_text)
                 .setContentInfo("INFO")
-                .setContentIntent(pendingI);
+                /*.setContentIntent(pendingI)*/;
 
         // do notify
         if (notificationManager != null)
             notificationManager.notify(1234, builder.build());
+
+        try {
+            pendingI.send();
+        } catch (PendingIntent.CanceledException e) {
+            e.printStackTrace();
+        }
 
         // reserve notification
         Methods.reserveNotification(context);

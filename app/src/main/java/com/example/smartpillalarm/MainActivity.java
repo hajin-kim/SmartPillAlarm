@@ -60,6 +60,7 @@ public class MainActivity extends AppCompatActivity {
     private Button profile_button;
     private Button scan_button;
     private Context appContext;
+    private Context thisContext;
     private FirebaseAuth firebaseAuth;
     private StringBuilder requestResult;
 
@@ -77,10 +78,10 @@ public class MainActivity extends AppCompatActivity {
         profile_button = findViewById(R.id.btn_main_profile);
         scan_button = findViewById(R.id.btn_main_scan);
         appContext = getApplicationContext();
+        thisContext = this;
 
         testButton = findViewById(R.id.btn_quant_test);
 
-        final Context context = this;
 
         firebaseAuth = FirebaseAuth.getInstance();    // for login-logout via Firebase
 
@@ -146,7 +147,7 @@ public class MainActivity extends AppCompatActivity {
         button_start.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(context, AlarmGeneratorActivity.class));
+                startActivity(new Intent(thisContext, AlarmGeneratorActivity.class));
 //                finish();
             }
         });
