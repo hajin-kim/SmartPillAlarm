@@ -24,19 +24,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/tvDay"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="2dp"
-        android:fontFamily="sans-serif-medium"
-        android:textColor="@color/colorG2"
-        android:text="imsi"
-        android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="@+id/tvDate"
-        app:layout_constraintStart_toEndOf="@+id/tvDate"
-        app:layout_constraintTop_toTopOf="@+id/tvDate" />
-
     <Button
         android:id="@+id/btnRight"
         android:layout_width="40dp"

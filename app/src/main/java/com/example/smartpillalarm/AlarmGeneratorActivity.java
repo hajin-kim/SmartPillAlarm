@@ -148,8 +148,9 @@ public class AlarmGeneratorActivity extends AppCompatActivity {
 
                 // reserve notification
                 Methods.reserveNotification(appContext);
-                if (extras_loaded)
+                if (extras_loaded) {
                     startActivity(new Intent(thisContext, MainActivity.class));
+                }
                 finish();
             }
         });
