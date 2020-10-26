@@ -152,6 +152,7 @@ public class MainActivity extends AppCompatActivity {
             // set data of children
             alarmDrugName.setText(alarm.getDrugName());
             alarmSwitch.setText(new SimpleDateFormat("a\nhh:mm", Locale.US).format(alarm.getTime()));
+            alarmSwitch.setChecked(alarm.isActivated());
 //            System.out.println(alarmDrugName.getText().toString() + alarmDrugName.getTextColors());
 //            System.out.println("MYTEST " + alarm.getDrugName());
         }
