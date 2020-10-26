@@ -8,7 +8,7 @@ public class Alarm implements Comparable<Alarm> {
     private boolean activated;
     private String drugName;
     private String drugProdCode;
-    private int num_drug;
+    private int num_pill;
 
 
     public Alarm(long time, String contents, boolean activated) {
@@ -17,16 +17,16 @@ public class Alarm implements Comparable<Alarm> {
         this.activated = activated;
         this.drugName = null;
         this.drugProdCode = null;
-        this.num_drug = Integer.MAX_VALUE;
+        this.num_pill = Integer.MAX_VALUE;
     }
 
-    public Alarm(long time, String contents, boolean activated, String drugName, String drugProdCode, int num_drug) {
+    public Alarm(long time, String contents, boolean activated, String drugName, String drugProdCode, int num_pill) {
         this.time = time;
         this.contents = contents;
         this.activated = activated;
         this.drugName = drugName;
         this.drugProdCode = drugProdCode;
-        this.num_drug = num_drug;
+        this.num_pill = num_pill;
     }
 
     @Override
@@ -55,13 +55,13 @@ public class Alarm implements Comparable<Alarm> {
         return drugProdCode;
     }
 
-    public int getNum_drug() {
-        return num_drug;
+    public int getNum_pill() {
+        return num_pill;
     }
 
-    public boolean decreaseNum_drug() {
-        if (num_drug <= 0) return false;
-        --num_drug;
+    public boolean decreaseNum_pill() {
+        if (num_pill <= 0) return false;
+        --num_pill;
         return true;
     }
 

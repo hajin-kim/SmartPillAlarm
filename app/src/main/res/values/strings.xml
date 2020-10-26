@@ -68,6 +68,7 @@
     <string name="extra_key_prodCode">KEY_prodCode</string>
     <string name="extra_key_drugInfo">KEY_contents</string>
     <string name="extra_key_numDrug">KEY_numDrug</string>
+    <string name="extra_key_NULL">KEY_NULL</string>
     <!--    done-->
 
 </resources>

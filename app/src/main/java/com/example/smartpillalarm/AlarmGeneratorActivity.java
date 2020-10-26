@@ -3,6 +3,7 @@ package com.example.smartpillalarm;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
@@ -18,6 +19,7 @@ import java.util.Locale;
 public class AlarmGeneratorActivity extends AppCompatActivity {
 
     private Context appContext;
+    private Context thisContext;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,6 +27,8 @@ public class AlarmGeneratorActivity extends AppCompatActivity {
         setContentView(R.layout.activity_alarm_generator);
 
         appContext = getApplicationContext();
+        thisContext = this;
+
         final TimePicker picker = findViewById(R.id.time_picker);
         picker.setIs24HourView(true);
 
@@ -74,6 +78,24 @@ public class AlarmGeneratorActivity extends AppCompatActivity {
                     return;
                 }
 
+                // load intent extra data
+                Intent intent = getIntent();
+                Bundle extras = intent.getExtras();
+                String prodCode = "";
+                String drugName = "";
+                String drugInfo = "";
+                int num_pill = 0;
+                boolean extras_loaded = false;
+                if (extras != null) {
+                    prodCode = extras.getString(getString(R.string.extra_key_prodCode));
+                    if (!prodCode.equals(getString(R.string.extra_key_NULL))) {
+                        drugName = extras.getString(getString(R.string.extra_key_drugName));
+                        drugInfo = extras.getString(getString(R.string.extra_key_drugInfo));
+                        num_pill = extras.getInt(getString(R.string.extra_key_numDrug));
+                        extras_loaded = true;
+                    }
+                }
+
                 // get selected time from the timePicker
                 int hour_24, minute;
                 if (Build.VERSION.SDK_INT >= 23) {
@@ -98,11 +120,23 @@ public class AlarmGeneratorActivity extends AppCompatActivity {
 
                 // insert alarm into DB
                 // show a toast message for that the alarm is generated
-                if (alarmDB.insertAlarm(calendar, "alarm", true)) {
-                    Methods.generateDateToast(appContext,
-                            R.string.message_alarm_generated,
-                            calendar.getTime());
+                boolean alarm_gen_succeed = false;
+                if (extras_loaded) {
+                    if (alarmDB.insertAlarm(calendar, drugInfo, true, drugName, prodCode, num_pill)) {
+                        Methods.generateDateToast(appContext,
+                                R.string.message_alarm_generated,
+                                calendar.getTime());
+                        alarm_gen_succeed = true;
+                    }
                 } else {
+                    if (alarmDB.insertAlarm(calendar, "alarm", true)) {
+                        Methods.generateDateToast(appContext,
+                                R.string.message_alarm_generated,
+                                calendar.getTime());
+                        alarm_gen_succeed = true;
+                    }
+                }
+                if (!alarm_gen_succeed) {
                     /*
                     should be implemented
                     H.K.
@@ -114,6 +148,9 @@ public class AlarmGeneratorActivity extends AppCompatActivity {
 
                 // reserve notification
                 Methods.reserveNotification(appContext);
+                if (extras_loaded)
+                    startActivity(new Intent(thisContext, MainActivity.class));
+                finish();
             }
         });
     }

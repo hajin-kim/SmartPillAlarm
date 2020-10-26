@@ -172,10 +172,10 @@ public class AlarmDB implements DB {
         return num_of_alarm;
     }
 
-    private AlarmDB(Context context) {
+    private AlarmDB(Context appContext) {
         this.num_of_alarm = 0;
         this.array_alarm = new Alarm[AlarmDB.MAX_ALARM];
-        this.sharedPreferences = context.getSharedPreferences(AlarmDB.DB_NAME, MODE_PRIVATE);
+        this.sharedPreferences = appContext.getSharedPreferences(AlarmDB.DB_NAME, MODE_PRIVATE);
     }
 
     // throws exception when the preference has a fault
@@ -247,7 +247,7 @@ public class AlarmDB implements DB {
             editor.putString(AlarmDB.ALARM_DRUG_PROD_CODES[i],
                     alarm.getDrugProdCode());
             editor.putInt(AlarmDB.ALARM_NUM_DRUG[i],
-                    alarm.getNum_drug());
+                    alarm.getNum_pill());
         }
         editor.apply();
     }
@@ -291,6 +291,20 @@ public class AlarmDB implements DB {
 
         array_alarm[num_of_alarm-1] = null;
         --num_of_alarm;
+
+        return this.updateAndPutPreferences();
+    }
+
+    public boolean deleteAlarm(String prodCode) {
+        for (int i = 0; i < num_of_alarm; ++i) {
+            Alarm alarm = array_alarm[i];
+            if (alarm.getDrugProdCode().equals(prodCode)) {
+                for (int j = i; j < --num_of_alarm; ++j) {
+                    array_alarm[j] = array_alarm[j+1];
+                }
+                array_alarm[num_of_alarm] = null;
+            }
+        }
 
         return this.updateAndPutPreferences();
     }

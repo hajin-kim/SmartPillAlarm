@@ -12,10 +12,12 @@ import androidx.appcompat.app.AppCompatActivity;
 //import androidx.appcompat.widget.Toolbar;
 
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
@@ -65,6 +67,8 @@ public class MainActivity extends AppCompatActivity {
     private FirebaseAuth firebaseAuth;
     private StringBuilder requestResult;
 
+    private int num_of_alarm;
+
     // TEST
     private Button testButton;
 
@@ -88,7 +92,6 @@ public class MainActivity extends AppCompatActivity {
         scan_button = findViewById(R.id.btnAdd);
         appContext = getApplicationContext();
         thisContext = this;
-
 
         firebaseAuth = FirebaseAuth.getInstance();    // for login-logout via Firebase
 
@@ -117,36 +120,30 @@ public class MainActivity extends AppCompatActivity {
 //            }
 //        });
 
-        // DEV CODE
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            deleteSharedPreferences(AlarmDB.DB_NAME);
-        }
+//        // DEV CODE
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+//            deleteSharedPreferences(AlarmDB.DB_NAME);
+//        }
 
         // DEV CODE
         AlarmDB.printAlarmDB(appContext);
-//        Methods.printNextAlarm(appContext);
 
-         //DEV CODE
-//        try {
-//            String productCode = "199903739";
-//            System.out.println("Start getAPI");
-//            Methods.getAPIResponse(getApplicationContext(), productCode);
-//            System.out.println("Done getAPI");
-//        } catch (IOException e) {
-//            System.out.println("Tracing getAPI");
-//            e.printStackTrace();
-//            System.out.println("Error found");
-//            Toast.makeText(appContext, "Error found", Toast.LENGTH_LONG).show();
-//        }
+        AlarmDB alarmDB = AlarmDB.getInstance(appContext);
+        num_of_alarm = alarmDB.getNum_of_alarm();
 
-        // renew
-//        AlarmDB.getInstance(appContext);
+        LayoutInflater alarmLayoutInflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
+        LinearLayout alarmContainer = (LinearLayout) findViewById(R.id.AlarmList);
+        for (int i = 0; i < num_of_alarm; ++i) {
+            alarmLayoutInflater.inflate(R.layout.activity_main_fragment_alarm, alarmContainer, true);
+        }
 
         final Button button_start = findViewById(R.id.button_start);
         button_start.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(thisContext, AlarmGeneratorActivity.class));
+                Intent alarmGeneratorIntent = new Intent(thisContext, AlarmGeneratorActivity.class);
+                alarmGeneratorIntent.putExtra(getString(R.string.extra_key_prodCode), getString(R.string.extra_key_NULL));
+                startActivity(alarmGeneratorIntent);
 //                finish();
             }
         });
@@ -208,7 +205,7 @@ public class MainActivity extends AppCompatActivity {
                     default:
                         Toast.makeText(appContext, result.getFormatName(), Toast.LENGTH_SHORT).show();
                         Toast.makeText(appContext, "인식할 수 없는 바코드입니다!", Toast.LENGTH_SHORT).show();
-
+                        return;
                 }
 
                 try {
@@ -465,6 +462,7 @@ public class MainActivity extends AppCompatActivity {
         scanResultIntent.putExtra(getString(R.string.extra_key_drugInfo), "내용"); // TODO: 여기에 전달할 효능효과 등의 내용을 넣어주세요.
         scanResultIntent.putExtra(getString(R.string.extra_key_numDrug), 5);
         startActivity(scanResultIntent);
+        finish();
     }
 
     private void sendPillData(PillData pillData){

@@ -16,7 +16,7 @@ public class ScanResultActivity extends AppCompatActivity {
     String prodCode;
     String drugName;
     String drugInfo;
-    int numDrug;
+    int num_pill;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,7 +30,7 @@ public class ScanResultActivity extends AppCompatActivity {
         prodCode = extras.getString(getString(R.string.extra_key_prodCode));
         drugName = extras.getString(getString(R.string.extra_key_drugName));
         drugInfo = extras.getString(getString(R.string.extra_key_drugInfo));
-        numDrug = extras.getInt(getString(R.string.extra_key_numDrug));
+        num_pill = extras.getInt(getString(R.string.extra_key_numDrug));
 
         TextView textViewDrugName = findViewById(R.id.scan_result_textview_drug_name);
         TextView textViewDrugInfo = findViewById(R.id.scan_result_textview_drug_info);
@@ -48,14 +48,16 @@ public class ScanResultActivity extends AppCompatActivity {
                 alarmGeneratorIntent.putExtra(getString(R.string.extra_key_prodCode), prodCode);
                 alarmGeneratorIntent.putExtra(getString(R.string.extra_key_drugName), drugName);
                 alarmGeneratorIntent.putExtra(getString(R.string.extra_key_drugInfo), drugInfo); // TODO: 여기에 전달할 효능효과 등의 내용을 넣어주세요.
-                alarmGeneratorIntent.putExtra(getString(R.string.extra_key_numDrug), numDrug);
+                alarmGeneratorIntent.putExtra(getString(R.string.extra_key_numDrug), num_pill);
                 startActivity(alarmGeneratorIntent);
+                finish();
             }
         });
 
         buttonCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                startActivity(new Intent(thisContext, MainActivity.class));
                 finish();
             }
         });

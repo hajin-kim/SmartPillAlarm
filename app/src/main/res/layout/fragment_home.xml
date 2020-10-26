@@ -70,6 +70,8 @@
         app:layout_constraintTop_toBottomOf="@+id/tvDate" />
 
 
+    <!--    buttons of activity_main-->
+
     <Button
         android:id="@+id/btnAdd"
         android:layout_width="80dp"
@@ -77,73 +79,10 @@
         android:background="@drawable/ic_baseline_add_box_24"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintHorizontal_bias="0.888"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.608" />
-
-    <Switch
-        android:id="@+id/switch5"
-        android:layout_width="360dp"
-        android:layout_height="60dp"
-        android:background="@color/colorPrimary"
-        android:text="                  NameofPill                                 AM 09:00"
-        android:textColor="@color/colorDefaultBackground"
-        tools:layout_editor_absoluteX="34dp"
-        tools:layout_editor_absoluteY="220dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/imageView2"
-        app:layout_constraintVertical_bias="0.05"
-        app:layout_constraintCircleRadius="12dp"/>
-    <Switch
-        android:id="@+id/switch6"
-        android:layout_width="360dp"
-        android:layout_height="60dp"
-        android:background="@color/colorPrimary"
-        android:text="                  NameofPill                                 AM 11:00"
-        android:textColor="@color/colorDefaultBackground"
-        tools:layout_editor_absoluteX="34dp"
-        tools:layout_editor_absoluteY="220dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/switch5"
-        app:layout_constraintVertical_bias="0.05"
-        app:layout_constraintCircleRadius="12dp"/>
-
-    <ImageView
-        android:id="@+id/imageView3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/ic_baseline_image_24"
-        app:layout_constraintStart_toStartOf="@+id/switch5"
-        app:layout_constraintEnd_toEndOf="@id/switch5"
-        app:layout_constraintTop_toTopOf="@id/switch5"
-        app:layout_constraintBottom_toBottomOf="@id/switch5"
-        app:layout_constraintHorizontal_bias="0.05"
-        app:layout_constraintVertical_bias="0.5"
-        tools:layout_editor_absoluteX="42dp"
-        tools:layout_editor_absoluteY="238dp" />
-
-    <ImageView
-        android:id="@+id/imageView4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/ic_baseline_image_24"
-        app:layout_constraintStart_toStartOf="@+id/switch6"
-        app:layout_constraintEnd_toEndOf="@id/switch6"
-        app:layout_constraintTop_toTopOf="@id/switch6"
-        app:layout_constraintBottom_toBottomOf="@id/switch6"
-        app:layout_constraintHorizontal_bias="0.05"
-        app:layout_constraintVertical_bias="0.5"
-        tools:layout_editor_absoluteX="42dp"
-        tools:layout_editor_absoluteY="318dp" />
-
-<!--    buttons of activity_main-->
+        app:layout_constraintVertical_bias="0.955" />
 
     <Button
         android:id="@+id/button_start"
@@ -163,11 +102,24 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="636dp"
+        android:layout_marginBottom="47dp"
         android:text="@string/btn_main_logout"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintHorizontal_bias="0.156"
+        app:layout_constraintStart_toEndOf="@+id/button_start"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <LinearLayout
+        android:id="@+id/AlarmList"
+        android:layout_width="360dp"
+        android:layout_height="380dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toTopOf="@+id/btn_main_logout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView2">
+    </LinearLayout>
 
     <!--    devjhp, merge on Sep. 13.-->
     <!--    bfr:         app:layout_constraintVertical_bias="0.245" />-->
