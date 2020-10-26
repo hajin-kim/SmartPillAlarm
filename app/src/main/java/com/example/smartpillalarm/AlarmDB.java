@@ -220,10 +220,7 @@ public class AlarmDB implements DB {
 
             this.array_alarm[i] = new Alarm(
                     alarm_time,
-                    alarm_contents,
-                    alarm_activated,
-                    alarm_drug_name,
-                    alarm_drug_product_code,
+                    alarm_activated, alarm_drug_product_code, alarm_drug_name, alarm_contents,
                     alarm_num_drug
             );
         }
@@ -239,7 +236,7 @@ public class AlarmDB implements DB {
             editor.putLong(AlarmDB.ALARM_TIME[i],
                     alarm.getTime());
             editor.putString(AlarmDB.ALARM_CONTENTS[i],
-                    alarm.getContents());
+                    alarm.getDrugInfo());
             editor.putBoolean(AlarmDB.ALARM_ACTIVATED[i],
                     alarm.isActivated());
             editor.putString(AlarmDB.ALARM_DRUG_NAMES[i],
@@ -262,24 +259,27 @@ public class AlarmDB implements DB {
         return this.updateAndPutPreferences();
     }
 
-    public boolean insertAlarm(long time, String contents, boolean activated) {
-        return this.insertAlarm(new Alarm(time, contents, activated));
+    public boolean insertAlarm(long time, boolean activated, String drugProdCode) {
+        return this.insertAlarm(new Alarm(time, activated, drugProdCode));
     }
 
-    public boolean insertAlarm(Calendar calendar, String contents, boolean activated) {
-        return this.insertAlarm(calendar.getTimeInMillis(), contents, activated);
+    public boolean insertAlarm(Calendar calendar, boolean activated, String drugProdCode) {
+        return this.insertAlarm(calendar.getTimeInMillis(), activated, drugProdCode);
     }
 
     // insert with whole alarm data
-    public boolean insertAlarm(long time, String contents, boolean activated, String drugName, String drugProdCode, int num_drug) {
-        return this.insertAlarm(new Alarm(time, contents, activated, drugName, drugProdCode, num_drug));
+    public boolean insertAlarm(long time, boolean activated, String drugProdCode, String drugName, String drugInfo, int num_drug) {
+        return this.insertAlarm(new Alarm(time, activated, drugProdCode, drugName, drugInfo, num_drug));
     }
 
-    public boolean insertAlarm(Calendar calendar, String contents, boolean activated, String drugName, String drugProdCode, int num_drug) {
-        return this.insertAlarm(calendar.getTimeInMillis(), contents, activated, drugName, drugProdCode, num_drug);
+    public boolean insertAlarm(Calendar calendar, boolean activated, String drugProdCode, String drugName, String drugInfo, int num_drug) {
+        return this.insertAlarm(calendar.getTimeInMillis(), activated, drugProdCode, drugName, drugInfo, num_drug);
     }
 
 
+    public Alarm getAlarmByIndex(int index) {
+        return array_alarm[index];
+    }
 
 
     public boolean deleteAlarm(int index) {
@@ -314,6 +314,7 @@ public class AlarmDB implements DB {
         Calendar current_calendar = Calendar.getInstance();
 
         for (int i = 0; i < num_of_alarm; ++i) {
+//            System.out.println("TTT" + num_of_alarm + ":" + i);
             array_alarm[i].updateAlarmDate(current_calendar);
         }
 
@@ -351,8 +352,11 @@ public class AlarmDB implements DB {
             System.out.println("# alarm " + i);
 
             System.out.println(date_text);
-            System.out.println(alarm.getContents());
             System.out.println(alarm.isActivated());
+            System.out.println(alarm.getDrugProdCode());
+            System.out.println(alarm.getDrugName());
+            System.out.println(alarm.getDrugInfo());
+            System.out.println(alarm.getNum_pill());
         }
     }
 }

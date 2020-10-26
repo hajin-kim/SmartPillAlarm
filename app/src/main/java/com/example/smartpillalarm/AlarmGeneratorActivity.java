@@ -32,7 +32,7 @@ public class AlarmGeneratorActivity extends AppCompatActivity {
         final TimePicker picker = findViewById(R.id.time_picker);
         picker.setIs24HourView(true);
 
-        final AlarmDB alarmDB = AlarmDB.getInstance(appContext);
+        AlarmDB alarmDB = AlarmDB.getInstance(appContext);
         Alarm alarm = alarmDB.getEarliestAlarm(true);
 
         // show a message for the next alarm
@@ -72,6 +72,7 @@ public class AlarmGeneratorActivity extends AppCompatActivity {
             @Override
             public void onClick(View arg0) {
                 // when this button is clicked
+                AlarmDB alarmDB = AlarmDB.getInstance(appContext);
                 int num_of_alarm = alarmDB.getNum_of_alarm();
                 if (num_of_alarm >= AlarmDB.MAX_ALARM) {
                     Methods.generateToast(appContext, R.string.warning_number_of_alarm_exceeds_limitation);
@@ -122,14 +123,15 @@ public class AlarmGeneratorActivity extends AppCompatActivity {
                 // show a toast message for that the alarm is generated
                 boolean alarm_gen_succeed = false;
                 if (extras_loaded) {
-                    if (alarmDB.insertAlarm(calendar, drugInfo, true, drugName, prodCode, num_pill)) {
+                    if (alarmDB.insertAlarm(calendar, true, prodCode, drugName, drugInfo, num_pill)) {
+                        System.out.println("added alarm with full data");
                         Methods.generateDateToast(appContext,
                                 R.string.message_alarm_generated,
                                 calendar.getTime());
                         alarm_gen_succeed = true;
                     }
                 } else {
-                    if (alarmDB.insertAlarm(calendar, "alarm", true)) {
+                    if (alarmDB.insertAlarm(calendar, true, "alarm")) {
                         Methods.generateDateToast(appContext,
                                 R.string.message_alarm_generated,
                                 calendar.getTime());
@@ -138,6 +140,7 @@ public class AlarmGeneratorActivity extends AppCompatActivity {
                 }
                 if (!alarm_gen_succeed) {
                     /*
+                    TODO:
                     should be implemented
                     H.K.
                      */

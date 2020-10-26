@@ -20,7 +20,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar"
         tools:targetApi="n">
-        <activity android:name=".ScanResultActivity"></activity>
+        <activity android:name=".ScanResultActivity" />
         <activity android:name=".AlarmActivity" /> <!-- open API request hotfix. TODO: resolve this min constraint -->
         <!-- devjhp, merge on Sep. 13. -->
         <activity

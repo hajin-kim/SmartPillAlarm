@@ -17,7 +17,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Switch;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
@@ -128,13 +131,29 @@ public class MainActivity extends AppCompatActivity {
         // DEV CODE
         AlarmDB.printAlarmDB(appContext);
 
+        // load local alarm DB
         AlarmDB alarmDB = AlarmDB.getInstance(appContext);
         num_of_alarm = alarmDB.getNum_of_alarm();
 
+        // init alarm layout
         LayoutInflater alarmLayoutInflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
         LinearLayout alarmContainer = (LinearLayout) findViewById(R.id.AlarmList);
         for (int i = 0; i < num_of_alarm; ++i) {
+            // inflate one block
             alarmLayoutInflater.inflate(R.layout.activity_main_fragment_alarm, alarmContainer, true);
+            LinearLayout alarmBlock = (LinearLayout) alarmContainer.getChildAt(i);
+//            System.out.println(alarmContainer.getChildCount());
+//            System.out.println(alarmBlock.getChildCount());
+            // get children of the block
+            ImageView alarmImage = (ImageView) alarmBlock.getChildAt(0);
+            TextView alarmDrugName = (TextView) alarmBlock.getChildAt(1);
+            Switch alarmSwitch = (Switch) alarmBlock.getChildAt(2);
+            // set data of children
+            alarmDrugName.setText(alarmDB.getAlarmByIndex(i).getDrugName());
+
+            System.out.println(alarmDrugName.getText().toString() + alarmDrugName.getTextColors());
+
+            System.out.println("MYTEST " + alarmDB.getAlarmByIndex(i).getDrugName());
         }
 
         final Button button_start = findViewById(R.id.button_start);

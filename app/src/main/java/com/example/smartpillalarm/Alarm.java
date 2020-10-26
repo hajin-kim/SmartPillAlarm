@@ -4,25 +4,25 @@ import java.util.Calendar;
 
 public class Alarm implements Comparable<Alarm> {
     private long time;
-    private String contents;
     private boolean activated;
-    private String drugName;
     private String drugProdCode;
+    private String drugName;
+    private String drugInfo;
     private int num_pill;
 
 
-    public Alarm(long time, String contents, boolean activated) {
+    public Alarm(long time, boolean activated, String drugProdCode) {
         this.time = time;
-        this.contents = contents;
         this.activated = activated;
+        this.drugProdCode = drugProdCode;
         this.drugName = null;
-        this.drugProdCode = null;
+        this.drugInfo = drugName;
         this.num_pill = Integer.MAX_VALUE;
     }
 
-    public Alarm(long time, String contents, boolean activated, String drugName, String drugProdCode, int num_pill) {
+    public Alarm(long time, boolean activated, String drugProdCode, String drugName, String drugInfo, int num_pill) {
         this.time = time;
-        this.contents = contents;
+        this.drugInfo = drugInfo;
         this.activated = activated;
         this.drugName = drugName;
         this.drugProdCode = drugProdCode;
@@ -39,20 +39,20 @@ public class Alarm implements Comparable<Alarm> {
         return time;
     }
 
-    public String getContents() {
-        return contents;
-    }
-
     public boolean isActivated() {
         return activated;
+    }
+
+    public String getDrugProdCode() {
+        return drugProdCode;
     }
 
     public String getDrugName() {
         return drugName;
     }
 
-    public String getDrugProdCode() {
-        return drugProdCode;
+    public String getDrugInfo() {
+        return drugInfo;
     }
 
     public int getNum_pill() {

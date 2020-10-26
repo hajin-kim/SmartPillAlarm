@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -36,14 +37,12 @@ public class ScanResultActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_scan_result);
 
+        // get extra data
         thisContext = this;
         Intent intent = getIntent();
         Bundle extras = intent.getExtras();
 
         prodCode = extras.getString(getString(R.string.extra_key_prodCode));
-        drugName = extras.getString(getString(R.string.extra_key_drugName));
-        drugInfo = extras.getString(getString(R.string.extra_key_drugInfo));
-        num_pill = extras.getInt(getString(R.string.extra_key_numDrug));
 
         final TextView textViewDrugName = findViewById(R.id.scan_result_textview_drug_name);
         final TextView textViewDrugInfo = findViewById(R.id.scan_result_textview_drug_info);
@@ -62,13 +61,16 @@ public class ScanResultActivity extends AppCompatActivity {
         pillDataRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                String infoText = "";
+                drugInfo = "";
                 for(DataSnapshot ds:snapshot.child("item_efficacy").getChildren()){
-                    infoText += ds.getValue().toString();
-                    infoText += "\n";
+                    drugInfo += ds.getValue().toString();
+                    drugInfo += "\n";
                 }
-                textViewDrugName.setText(snapshot.child("item_name").getValue().toString());
-                textViewDrugInfo.setText(infoText);
+                drugName = snapshot.child("item_name").getValue().toString();
+                num_pill = Integer.parseInt(snapshot.child("pack_unit").getValue().toString());
+                textViewDrugName.setText(drugName);
+                textViewDrugInfo.setText(drugInfo);
+//                num_pill = extras.getInt(getString(R.string.extra_key_numDrug));
             }
 
             @Override
@@ -80,6 +82,10 @@ public class ScanResultActivity extends AppCompatActivity {
         buttonConfirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if (drugName == null) {
+                    Toast.makeText(getApplicationContext(), "다시 눌러주세요!", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 Intent alarmGeneratorIntent = new Intent(thisContext, AlarmGeneratorActivity.class);
                 alarmGeneratorIntent.putExtra(getString(R.string.extra_key_prodCode), prodCode);
                 alarmGeneratorIntent.putExtra(getString(R.string.extra_key_drugName), drugName);
