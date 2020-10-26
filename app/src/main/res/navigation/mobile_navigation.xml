@@ -24,5 +24,5 @@
         android:id="@+id/homeFragment2"
         android:name="com.example.smartpillalarm.ui.home.HomeFragment"
         android:label="fragment_home"
-        tools:layout="@layout/fragment_home" />
+        tools:layout="@layout/activity_main_fragment_home" />
 </navigation>

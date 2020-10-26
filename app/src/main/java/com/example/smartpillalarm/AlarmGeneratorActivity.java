@@ -50,7 +50,7 @@ public class AlarmGeneratorActivity extends AppCompatActivity {
         Date currentTime = Calendar.getInstance().getTime();
 
         // set the time of the timePicker for the default(current)
-        SimpleDateFormat HourFormat = new SimpleDateFormat("kk", Locale.getDefault());
+        SimpleDateFormat HourFormat = new SimpleDateFormat("HH", Locale.getDefault());
         SimpleDateFormat MinuteFormat = new SimpleDateFormat("mm", Locale.getDefault());
 
         int pre_hour = Integer.parseInt(HourFormat.format(currentTime));

@@ -1,13 +1,10 @@
 package com.example.smartpillalarm;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 //import androidx.appcompat.widget.Toolbar;
 
@@ -55,7 +52,9 @@ import java.io.StringReader;
 import java.lang.reflect.Field;
 import java.net.URLEncoder;
 import java.nio.charset.Charset;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Locale;
 import java.util.Map;
 
 // Branch Produced by mk
@@ -80,7 +79,7 @@ public class MainActivity extends AppCompatActivity {
         setTheme(R.style.AppTheme_NoActionBar);
 
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.fragment_home);
+        setContentView(R.layout.activity_main_fragment_home);
 //        BottomNavigationView navView = findViewById(R.id.nav_view);
 //        // Passing each menu ID as a set of Ids because each
 //        // menu should be considered as top level destinations.
@@ -139,6 +138,8 @@ public class MainActivity extends AppCompatActivity {
         LayoutInflater alarmLayoutInflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
         LinearLayout alarmContainer = (LinearLayout) findViewById(R.id.AlarmList);
         for (int i = 0; i < num_of_alarm; ++i) {
+            // get an alarm data
+            Alarm alarm = alarmDB.getAlarmByIndex(i);
             // inflate one block
             alarmLayoutInflater.inflate(R.layout.activity_main_fragment_alarm, alarmContainer, true);
             LinearLayout alarmBlock = (LinearLayout) alarmContainer.getChildAt(i);
@@ -149,11 +150,10 @@ public class MainActivity extends AppCompatActivity {
             TextView alarmDrugName = (TextView) alarmBlock.getChildAt(1);
             Switch alarmSwitch = (Switch) alarmBlock.getChildAt(2);
             // set data of children
-            alarmDrugName.setText(alarmDB.getAlarmByIndex(i).getDrugName());
-
-            System.out.println(alarmDrugName.getText().toString() + alarmDrugName.getTextColors());
-
-            System.out.println("MYTEST " + alarmDB.getAlarmByIndex(i).getDrugName());
+            alarmDrugName.setText(alarm.getDrugName());
+            alarmSwitch.setText(new SimpleDateFormat("a\nhh:mm", Locale.US).format(alarm.getTime()));
+//            System.out.println(alarmDrugName.getText().toString() + alarmDrugName.getTextColors());
+//            System.out.println("MYTEST " + alarm.getDrugName());
         }
 
         final Button button_start = findViewById(R.id.button_start);
