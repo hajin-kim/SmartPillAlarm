@@ -61,12 +61,22 @@ public class ScanResultActivity extends AppCompatActivity {
         pillDataRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+                String wholeName;
+                Integer paranthesis_idx;
+
                 drugInfo = "";
                 for(DataSnapshot ds:snapshot.child("item_efficacy").getChildren()){
                     drugInfo += ds.getValue().toString();
                     drugInfo += "\n";
                 }
-                drugName = snapshot.child("item_name").getValue().toString();
+
+                // drugName formatting: () 존재하면 그 전까지만 나오도록 포매팅
+                wholeName = snapshot.child("item_name").getValue().toString();
+                paranthesis_idx = wholeName.indexOf("(");
+                if (paranthesis_idx != -1){
+                    wholeName = wholeName.substring(0,paranthesis_idx);
+                }
+                drugName = wholeName;
                 num_pill = Integer.parseInt(snapshot.child("pack_unit").getValue().toString());
                 textViewDrugName.setText(drugName);
                 textViewDrugInfo.setText(drugInfo);

@@ -2,6 +2,8 @@ package com.example.smartpillalarm;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
+import android.media.Image;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -62,7 +64,6 @@ public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "MainActivity";
     private Button logout_button;
-    private Button profile_button;
     private Button scan_button;
     private Context appContext;
     private Context thisContext;
@@ -111,17 +112,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        // TODO: controlProdQuant 사용해서 알약 개수 조절하기
-        // ex) 알약 개수 두 개 차감하려면:
-        //     >> controlProdQuant(firebaseAuth, firebaseDatabase, prodCode, -2);
-//        final FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
-//        testButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                controlProdQuant(firebaseAuth, firebaseDatabase, "199303108", -2);
-//            }
-//        });
-
 //        // DEV CODE
 //        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
 //            deleteSharedPreferences(AlarmDB.DB_NAME);
@@ -133,6 +123,7 @@ public class MainActivity extends AppCompatActivity {
         // load local alarm DB
         AlarmDB alarmDB = AlarmDB.getInstance(appContext);
         num_of_alarm = alarmDB.getNum_of_alarm();
+
 
         // init alarm layout
         LayoutInflater alarmLayoutInflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
@@ -146,7 +137,13 @@ public class MainActivity extends AppCompatActivity {
 //            System.out.println(alarmContainer.getChildCount());
 //            System.out.println(alarmBlock.getChildCount());
             // get children of the block
-            ImageView alarmImage = (ImageView) alarmBlock.getChildAt(0);
+            //ImageView alarmImage = (ImageView) alarmBlock.getChildAt(0);
+
+            // Dummy Pill Image
+
+            Drawable drawable = getResources().getDrawable(R.drawable.pill_icon);
+            ImageView alarmImage = new ImageView(appContext);
+            alarmImage.setImageDrawable(drawable);
             TextView alarmDrugName = (TextView) alarmBlock.getChildAt(1);
             Switch alarmSwitch = (Switch) alarmBlock.getChildAt(2);
             // set data of children
@@ -157,16 +154,16 @@ public class MainActivity extends AppCompatActivity {
 //            System.out.println("MYTEST " + alarm.getDrugName());
         }
 
-        final Button button_start = findViewById(R.id.button_start);
-        button_start.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent alarmGeneratorIntent = new Intent(thisContext, AlarmGeneratorActivity.class);
-                alarmGeneratorIntent.putExtra(getString(R.string.extra_key_prodCode), getString(R.string.extra_key_NULL));
-                startActivity(alarmGeneratorIntent);
-//                finish();
-            }
-        });
+//        final Button button_start = findViewById(R.id.button_start);
+//        button_start.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Intent alarmGeneratorIntent = new Intent(thisContext, AlarmGeneratorActivity.class);
+//                alarmGeneratorIntent.putExtra(getString(R.string.extra_key_prodCode), getString(R.string.extra_key_NULL));
+//                startActivity(alarmGeneratorIntent);
+////                finish();
+//            }
+//        });
     }
 
     private void logout(){
@@ -478,7 +475,7 @@ public class MainActivity extends AppCompatActivity {
         Intent scanResultIntent = new Intent(thisContext, ScanResultActivity.class);
         scanResultIntent.putExtra(getString(R.string.extra_key_prodCode), prodCode);
 //        scanResultIntent.putExtra(getString(R.string.extra_key_drugName), "이름");
-//        scanResultIntent.putExtra(getString(R.string.extra_key_drugInfo), "내용"); // TODO: 여기에 전달할 효능효과 등의 내용을 넣어주세요.
+//        scanResultIntent.putExtra(getString(R.string.extra_key_drugInfo), "내용");
 //        scanResultIntent.putExtra(getString(R.string.extra_key_numDrug), 5);
         startActivity(scanResultIntent);
         finish();

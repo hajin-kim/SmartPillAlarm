@@ -6,7 +6,4 @@
   <component name="ProjectType">
     <option name="id" value="Android" />
   </component>
-  <component name="TaskProjectConfiguration">
-    <server type="Gitlab" url="http://lab.hanium.or.kr/20_hg009y/main" />
-  </component>
 </project>
