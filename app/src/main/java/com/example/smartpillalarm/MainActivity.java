@@ -513,30 +513,4 @@ public class MainActivity extends AppCompatActivity {
         Toast.makeText(this, "약 데이터 업로드 완료", Toast.LENGTH_SHORT).show();
     }
 
-    public void controlProdQuant(FirebaseAuth firebaseAuth, FirebaseDatabase firebaseDatabase, String prodCode, Integer prodQuant){
-        /*
-         * 제품 수량 조절하는 함수: 주로 약 복용 체크시 개수 하나씩 까는 데 사용할 것
-         * 유저의 firebaseAuth, firebaseDatabase를 제공받은 후 제품의 prodCode를 받아 수량을 조절함
-         * ex) 알약 개수 두 개 차감하려면:
-         *     >> controlProdQuant(firebaseAuth, firebaseDatabase, prodCode, -2);
-         * */
-        final Integer quantity = prodQuant;
-        final DatabaseReference myRef = firebaseDatabase.getReference(firebaseAuth.getUid());
-        final DatabaseReference myQuant = myRef.child("PillData").child(prodCode).child("pack_unit");
-
-        // onDataChange: due to asynchronous behavior, everything must be done inside it!
-        myQuant.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                Integer currentQuant = Integer.parseInt(snapshot.getValue().toString());
-                myQuant.setValue(String.valueOf(currentQuant+quantity));
-
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-            }
-        });
-    }
-
 }

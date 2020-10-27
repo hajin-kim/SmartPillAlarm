@@ -40,7 +40,7 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="80dp"
         android:layout_marginBottom="96dp"
-        android:text="cancel"
+        android:text="취소"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
@@ -51,7 +51,7 @@
         android:layout_marginStart="80dp"
         android:layout_marginEnd="76dp"
         android:layout_marginBottom="96dp"
-        android:text="confirm"
+        android:text="알람 설정"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/scan_result_button_cancel"
         app:layout_constraintHorizontal_bias="1.0"
