@@ -15,7 +15,7 @@
         android:inputType="textPersonName"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.056" />
@@ -29,7 +29,7 @@
         android:inputType="textPassword"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/et_register_Email"
         app:layout_constraintVertical_bias="0.046" />
@@ -44,7 +44,7 @@
         android:inputType="textEmailAddress"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/et_register_ID"
         app:layout_constraintVertical_bias="0.001" />
@@ -134,7 +134,7 @@
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintVertical_bias="0.059" />
+        app:layout_constraintVertical_bias="0.05" />
 
     <CheckBox
         android:id="@+id/checkbox_register_pregnancy"
@@ -147,7 +147,7 @@
         android:layout_marginEnd="20dp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/checkbox_register_blood_pressure"
-        app:layout_constraintVertical_bias="0.059" />
+        app:layout_constraintVertical_bias="0.05" />
 
     <CheckBox
         android:id="@+id/checkbox_register_diabetes"
@@ -160,7 +160,7 @@
         android:layout_marginStart="20dp"
         app:layout_constraintStart_toEndOf="@+id/checkbox_register_blood_pressure"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintVertical_bias="0.059" />
+        app:layout_constraintVertical_bias="0.05" />
 
     <EditText
         android:id="@+id/et_register_age"
@@ -175,5 +175,40 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv_register_userdetails" />
 
+    <Button
+        android:id="@+id/deco1"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:background="@drawable/ic_arrow_right_24"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/et_register_ID"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.062" />
+
+    <Button
+        android:id="@+id/deco2"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:background="@drawable/ic_arrow_right_24"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/et_register_Email"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.159" />
+
+    <Button
+        android:id="@+id/deco3"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:background="@drawable/ic_arrow_right_24"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/et_register_PW"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.259" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

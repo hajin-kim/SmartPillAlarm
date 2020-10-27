@@ -7,25 +7,36 @@
     android:layout_height="match_parent"
     tools:context=".AlarmGeneratorActivity">
 
+
     <TimePicker
         android:id="@+id/time_picker"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:alwaysDrawnWithCache="false"
+        android:amPmBackgroundColor="@color/transparentbutton"
+        android:background="@color/colorDefaultBackground"
+        android:backgroundTint="@color/colorDefaultBackground"
+        android:foregroundTint="@color/colorPrimary"
+        android:headerBackground="@color/colorPrimary"
+        android:timePickerMode="clock"
         app:layout_constraintBottom_toTopOf="@id/button_alarm_generator"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="0.496"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_chainStyle="packed" />
+        app:layout_constraintVertical_chainStyle="packed"
+        android:numbersBackgroundColor="@color/transparentbutton"
+        android:numbersSelectorColor="@color/colorPrimaryDark"/>
 
     <Button
         android:id="@+id/button_alarm_generator"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
+        android:background="@color/colorPrimary"
+        android:textColor="@color/colorDefaultBackground"
         android:text="@string/button_text_alarm_generator"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHorizontal_bias="0.501"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/time_picker" />
