@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:drawable="@color/colorPrimary" />
-    <item android:drawable="@mipmap/ic_launcher" android:gravity="center" />
+    <item><shape android:shape="rectangle">
+        <size android:width="1035dp"
+            android:height="1035dp" />
+        <solid android:color="@color/colorDefaultBackground" />
+    </shape> </item>
+    <item android:drawable="@color/colorDefaultBackground" />
+    <item android:drawable="@drawable/logo" android:gravity="center" />
 </layer-list>
