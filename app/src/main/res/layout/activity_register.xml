@@ -56,7 +56,7 @@
         android:text="@string/btn_register_register"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.517"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/et_register_PW"
         app:layout_constraintVertical_bias="0.564" />
@@ -103,7 +103,7 @@
         android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/et_register_age"
         app:layout_constraintVertical_bias="0.081">
@@ -129,36 +129,37 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/checkbox_register_blood_pressure"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/checkbox_register_diabetes"
-        app:layout_constraintHorizontal_bias="0.976"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/rgroup_register_gender"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintVertical_bias="0.059" />
 
     <CheckBox
         android:id="@+id/checkbox_register_pregnancy"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="104dp"
-        android:layout_marginTop="16dp"
         android:text="@string/checkbox_register_pregnancy"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/rgroup_register_gender"
-        app:layout_constraintVertical_bias="0.009" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        android:layout_marginEnd="20dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/checkbox_register_blood_pressure"
+        app:layout_constraintVertical_bias="0.059" />
 
     <CheckBox
         android:id="@+id/checkbox_register_diabetes"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/checkbox_register_diabetes"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.682"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/rgroup_register_gender"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_bias="0.00"
+        android:layout_marginStart="20dp"
+        app:layout_constraintStart_toEndOf="@+id/checkbox_register_blood_pressure"
+        app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintVertical_bias="0.059" />
 
     <EditText
@@ -170,7 +171,7 @@
         android:hint="나이"
         android:inputType="number"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv_register_userdetails" />
 

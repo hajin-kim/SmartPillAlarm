@@ -15,7 +15,7 @@
 
     <!-- 스플래시 스크린 액티비티용 테마 -->
     <style name="SplashTheme" parent="AppTheme.NoActionBar">
-        <item name="android:background">@drawable/splash</item>
+        <item name="android:background">@drawable/splash_theme</item>
     </style>
     <!-- switch button -->
     <style name="SwitchButtonStyle">

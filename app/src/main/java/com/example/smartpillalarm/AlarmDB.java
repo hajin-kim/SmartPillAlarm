@@ -166,6 +166,7 @@ public class AlarmDB implements DB {
 
     private int num_of_alarm;
     private Alarm[] array_alarm;
+    private Context appContext;
     private SharedPreferences sharedPreferences;
 
     public int getNum_of_alarm() {
@@ -176,6 +177,7 @@ public class AlarmDB implements DB {
         this.num_of_alarm = 0;
         this.array_alarm = new Alarm[AlarmDB.MAX_ALARM];
         this.sharedPreferences = appContext.getSharedPreferences(AlarmDB.DB_NAME, MODE_PRIVATE);
+        this.appContext = appContext;
     }
 
     // throws exception when the preference has a fault
@@ -306,7 +308,9 @@ public class AlarmDB implements DB {
             }
         }
 
-        return this.updateAndPutPreferences();
+        boolean ret = this.updateAndPutPreferences();
+        Methods.reserveNotification(appContext);
+        return ret;
     }
 
 

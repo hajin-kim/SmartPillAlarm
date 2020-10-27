@@ -1,6 +1,8 @@
 package com.example.smartpillalarm;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.media.Image;
@@ -16,6 +18,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Switch;
@@ -77,7 +80,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        setTheme(R.style.AppTheme_NoActionBar);
+//        setTheme(R.style.AppTheme_NoActionBar);
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_fragment_home);
@@ -121,9 +124,8 @@ public class MainActivity extends AppCompatActivity {
         AlarmDB.printAlarmDB(appContext);
 
         // load local alarm DB
-        AlarmDB alarmDB = AlarmDB.getInstance(appContext);
+        final AlarmDB alarmDB = AlarmDB.getInstance(appContext);
         num_of_alarm = alarmDB.getNum_of_alarm();
-
 
         // init alarm layout
         LayoutInflater alarmLayoutInflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
@@ -147,6 +149,32 @@ public class MainActivity extends AppCompatActivity {
             alarmDrugName.setText(alarm.getDrugName());
             alarmSwitch.setText(new SimpleDateFormat("a\nhh:mm", Locale.US).format(alarm.getTime()));
             alarmSwitch.setChecked(alarm.isActivated());
+            alarmSwitch.setTextOn("삭제");
+            final int index = i;
+            alarmSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                    if (!b) {
+                        AlertDialog.Builder builder = new AlertDialog.Builder(thisContext);
+                        builder.setMessage("이 알람을 삭제하시겠습니까?\n같은 약품이 모두 삭제됩니다.");
+                        builder.setTitle("알람 삭제");
+                        builder.setPositiveButton("삭제", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                alarmDB.deleteAlarm(alarmDB.getAlarmByIndex(index).getDrugProdCode());
+                                recreate();
+                            }
+                        }).setNegativeButton("취소", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                //finish();
+                            }
+                        });
+                        AlertDialog dialog = builder.create();
+                        dialog.show();
+                    }
+                }
+            });
 //            System.out.println(alarmDrugName.getText().toString() + alarmDrugName.getTextColors());
 //            System.out.println("MYTEST " + alarm.getDrugName());
         }
