@@ -76,8 +76,9 @@
         android:id="@+id/button_start"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="17dp"
-        android:text="@string/button_text_start"
+        android:background="@color/transparentbutton"
+        android:text="수동 설정"
+        android:textColor="@color/colorDefaultBackground"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.133"
@@ -89,14 +90,15 @@
         android:id="@+id/btn_main_logout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="636dp"
-        android:layout_marginBottom="47dp"
-        android:text="@string/btn_main_logout"
+        android:background="@color/transparentbutton"
+        android:text="로그아웃"
+        android:textColor="@color/colorDefaultBackground"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.156"
         app:layout_constraintStart_toEndOf="@+id/button_start"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.929" />
 
     <LinearLayout
         android:id="@+id/AlarmList"
