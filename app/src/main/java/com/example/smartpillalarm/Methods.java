@@ -70,9 +70,18 @@ public class Methods {
     //   public void diaryNotification(long time)
     public static void reserveNotification(Context context)
     {
+        // get earliest alarm
+        AlarmDB alarmDB = AlarmDB.getInstance(context);
+        Alarm alarm = alarmDB.getEarliestAlarm(true);
+
         PackageManager packageManager = context.getPackageManager();
         ComponentName receiver = new ComponentName(context, DeviceBootReceiver.class);
         Intent alarmIntent = new Intent(context, AlarmReceiver.class);
+
+        alarmIntent.putExtra(context.getString(R.string.extra_key_prodCode), alarm.getDrugProdCode());
+        alarmIntent.putExtra(context.getString(R.string.extra_key_drugName), alarm.getDrugName());
+        alarmIntent.putExtra(context.getString(R.string.extra_key_drugInfo), alarm.getDrugInfo());
+        alarmIntent.putExtra(context.getString(R.string.extra_key_numDrug), alarm.getNum_pill());
 
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, alarmIntent, 0);
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
@@ -82,10 +91,6 @@ public class Methods {
                     R.string.message_on_exception_null_alarm_manager);
             return;
         }
-
-        // get earliest alarm
-        AlarmDB alarmDB = AlarmDB.getInstance(context);
-        Alarm alarm = alarmDB.getEarliestAlarm(true);
 
         // jf user activated the alarm
         if (alarm != null) {

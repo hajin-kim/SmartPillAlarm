@@ -137,16 +137,13 @@ public class MainActivity extends AppCompatActivity {
 //            System.out.println(alarmContainer.getChildCount());
 //            System.out.println(alarmBlock.getChildCount());
             // get children of the block
-            //ImageView alarmImage = (ImageView) alarmBlock.getChildAt(0);
-
-            // Dummy Pill Image
-
-            Drawable drawable = getResources().getDrawable(R.drawable.pill_icon);
-            ImageView alarmImage = new ImageView(appContext);
-            alarmImage.setImageDrawable(drawable);
+            ImageView alarmImage = (ImageView) alarmBlock.getChildAt(0);
             TextView alarmDrugName = (TextView) alarmBlock.getChildAt(1);
             Switch alarmSwitch = (Switch) alarmBlock.getChildAt(2);
+            // Dummy Pill Image
             // set data of children
+            Drawable drawable = getResources().getDrawable(R.drawable.pill_icon);
+            alarmImage.setImageDrawable(drawable);
             alarmDrugName.setText(alarm.getDrugName());
             alarmSwitch.setText(new SimpleDateFormat("a\nhh:mm", Locale.US).format(alarm.getTime()));
             alarmSwitch.setChecked(alarm.isActivated());

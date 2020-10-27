@@ -7,23 +7,45 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
+import android.os.Bundle;
 
 import androidx.core.app.NotificationCompat;
 
 public class AlarmReceiver extends BroadcastReceiver {
 
+    private String prodCode;
+    private String drugName;
+    private String drugInfo;
+    private int num_pill;
+    private boolean extras_loaded;
+
     @Override
     public void onReceive(Context context, Intent intent) {
+
+        Bundle extras = intent.getExtras();
+        assert extras != null;
+        prodCode = extras.getString(context.getString(R.string.extra_key_prodCode));
+        if (!prodCode.equals(context.getString(R.string.extra_key_NULL))) {
+            drugName = extras.getString(context.getString(R.string.extra_key_drugName));
+            drugInfo = extras.getString(context.getString(R.string.extra_key_drugInfo));
+            num_pill = extras.getInt(context.getString(R.string.extra_key_numDrug));
+            extras_loaded = true;
+        }
 
         // decline strings
         String channelName = context.getString(R.string.channel_alarm_notification_name);
         String channelDescription = context.getString(R.string.channel_alarm_notification_description);
         String alarm_auto_channel_content_title = context.getResources().getString(R.string.notification_auto_channel_content_title);
-        String alarm_auto_channel_content_text = context.getResources().getString(R.string.notification_auto_channel_content_text);
+        String alarm_auto_channel_content_text = context.getResources().getString(R.string.notification_auto_channel_content_text) + ": " + extras.getString(context.getString(R.string.extra_key_drugName));
 
 
         NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
         Intent notificationIntent = new Intent(context, AlarmActivity.class);
+
+        notificationIntent.putExtra(context.getString(R.string.extra_key_prodCode), prodCode);
+        notificationIntent.putExtra(context.getString(R.string.extra_key_drugName), drugName);
+        notificationIntent.putExtra(context.getString(R.string.extra_key_drugInfo), drugInfo);
+        notificationIntent.putExtra(context.getString(R.string.extra_key_numDrug), num_pill);
 
         notificationIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
         PendingIntent pendingI = PendingIntent.getActivity(context, 0, notificationIntent, 0);
